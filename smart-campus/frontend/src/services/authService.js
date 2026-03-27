@@ -1,7 +1,7 @@
 const authService = {
-  getMe: () => Promise.resolve(null),
-  refreshToken: () => Promise.resolve(null),
-  logout: () => Promise.resolve(null),
+  getMe: async () => null,
+  refreshToken: async () => null,
+  logout: async () => ({ ok: true })
 };
 
 export default authService;

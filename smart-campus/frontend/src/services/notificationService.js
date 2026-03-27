@@ -1,9 +1,10 @@
+import { mockNotifications } from "../data/mock";
+
 const notificationService = {
-  getMyNotifications: () => Promise.resolve([]),
-  getUnreadCount: () => Promise.resolve(0),
-  markRead: () => Promise.resolve(null),
-  markAllRead: () => Promise.resolve(null),
-  send: () => Promise.resolve(null),
+  getMyNotifications: async () => mockNotifications,
+  getUnreadCount: async () => mockNotifications.filter((n) => n.unread).length,
+  markRead: async () => ({ ok: true }),
+  markAllRead: async () => ({ ok: true })
 };
 
 export default notificationService;

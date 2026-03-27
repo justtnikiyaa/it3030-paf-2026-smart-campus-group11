@@ -1,10 +1,20 @@
-import React from "react";
+import { Button } from "../ui/button";
 
-export default function NotificationFilters() {
+export default function NotificationFilters({ activeFilter, onFilterChange }) {
+  const filters = ["All", "Unread", "System", "Academic"];
+
   return (
-    <div>
-      <button type="button">All</button>
-      <button type="button">Unread</button>
+    <div className="mb-4 flex flex-wrap gap-2">
+      {filters.map((filter) => (
+        <Button
+          key={filter}
+          size="sm"
+          variant={activeFilter === filter ? "default" : "secondary"}
+          onClick={() => onFilterChange(filter)}
+        >
+          {filter}
+        </Button>
+      ))}
     </div>
   );
 }
