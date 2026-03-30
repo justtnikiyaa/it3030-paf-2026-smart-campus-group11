@@ -6,17 +6,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 export default function UnauthorizedPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md text-center shadow-premium">
-        <CardHeader>
+      <Card className="w-full max-w-md shadow-premium">
+        <CardHeader className="text-center">
           <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-600">
             <AlertTriangle className="h-6 w-6" />
           </div>
-          <CardTitle>Access restricted</CardTitle>
-          <CardDescription>Your role does not have permission for this page.</CardDescription>
+          <CardTitle>Unauthorized Access</CardTitle>
+          <CardDescription>You do not have permission to view this page.</CardDescription>
         </CardHeader>
         <CardContent>
           <Link to="/dashboard">
-            <Button className="w-full">Return to dashboard</Button>
+            <Button className="w-full">Go to Dashboard</Button>
           </Link>
         </CardContent>
       </Card>

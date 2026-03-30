@@ -2,38 +2,26 @@ import { createContext, useMemo, useState } from "react";
 
 export const AuthContext = createContext(null);
 
-const seedUser = {
-  STUDENT: { name: "Nethmi Perera", email: "student@campus.edu", role: "STUDENT" },
+const users = {
+  STUDENT: { name: "Student User", email: "student@campus.edu", role: "STUDENT" },
   ADMIN: { name: "Admin User", email: "admin@campus.edu", role: "ADMIN" }
 };
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isSessionExpired, setIsSessionExpired] = useState(false);
 
-  const loginWithRole = (role) => {
-    setUser(seedUser[role]);
-    setIsSessionExpired(false);
-  };
-
+  const loginAs = (role) => setUser(users[role]);
   const logout = () => setUser(null);
-
-  const expireSession = () => {
-    setUser(null);
-    setIsSessionExpired(true);
-  };
 
   const value = useMemo(
     () => ({
       user,
       role: user?.role || null,
       isAuthenticated: Boolean(user),
-      isSessionExpired,
-      loginWithRole,
-      logout,
-      expireSession
+      loginAs,
+      logout
     }),
-    [user, isSessionExpired]
+    [user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
