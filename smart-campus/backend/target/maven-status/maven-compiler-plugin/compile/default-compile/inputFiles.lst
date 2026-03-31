@@ -17,6 +17,7 @@ C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\not
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\notification\repository\NotificationRepository.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\notification\service\NotificationService.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\security\CustomOAuth2UserService.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\security\OAuth2LoginSuccessHandler.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\SmartCampusApplication.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\user\entity\Role.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\user\entity\RoleName.java

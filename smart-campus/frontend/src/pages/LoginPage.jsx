@@ -4,7 +4,7 @@ import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
 
 export default function LoginPage() {
-  const { loginAs } = useAuth();
+  const { loginAs, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const loginAndGo = (role) => {
@@ -57,7 +57,7 @@ export default function LoginPage() {
 
             <button
               type="button"
-              onClick={() => loginAndGo("USER")}
+              onClick={loginWithGoogle}
               className="group flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               <svg viewBox="0 0 48 48" className="h-5 w-5" aria-hidden="true">

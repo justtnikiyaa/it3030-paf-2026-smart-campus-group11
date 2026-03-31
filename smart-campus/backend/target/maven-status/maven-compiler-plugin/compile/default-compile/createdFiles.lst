@@ -2,6 +2,7 @@ com\smartcampus\common\exception\GlobalExceptionHandler.class
 com\smartcampus\auth\dto\AuthMeResponse.class
 com\smartcampus\notification\repository\NotificationRepository.class
 com\smartcampus\config\SecurityConfig.class
+com\smartcampus\security\OAuth2LoginSuccessHandler.class
 com\smartcampus\auth\controller\AuthController.class
 com\smartcampus\notification\controller\NotificationController.class
 com\smartcampus\notification\repository\NotificationPreferenceRepository.class
