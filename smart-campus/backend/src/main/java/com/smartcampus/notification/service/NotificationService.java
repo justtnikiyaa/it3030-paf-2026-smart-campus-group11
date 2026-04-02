@@ -67,31 +67,31 @@ public class NotificationService {
     }
 
     @Transactional
-    public NotificationResponse createBookingApprovedNotification(Long userId, Long bookingId) {
+    public void createBookingApprovedNotification(Long userId, Long bookingId) {
         String title = "Booking Approved";
         String message = "Your booking #" + bookingId + " has been approved.";
-        return createSystemNotification(userId, title, message, NotificationType.BOOKING_APPROVED);
+        createEventNotification(userId, title, message, NotificationType.BOOKING_APPROVED);
     }
 
     @Transactional
-    public NotificationResponse createBookingRejectedNotification(Long userId, Long bookingId) {
+    public void createBookingRejectedNotification(Long userId, Long bookingId) {
         String title = "Booking Rejected";
         String message = "Your booking #" + bookingId + " has been rejected.";
-        return createSystemNotification(userId, title, message, NotificationType.BOOKING_REJECTED);
+        createEventNotification(userId, title, message, NotificationType.BOOKING_REJECTED);
     }
 
     @Transactional
-    public NotificationResponse createTicketStatusChangedNotification(Long userId, Long ticketId, String status) {
+    public void createTicketStatusChangedNotification(Long userId, Long ticketId, String status) {
         String title = "Ticket Status Updated";
         String message = "Your ticket #" + ticketId + " status changed to: " + status + ".";
-        return createSystemNotification(userId, title, message, NotificationType.TICKET_STATUS_CHANGED);
+        createEventNotification(userId, title, message, NotificationType.TICKET_STATUS_CHANGED);
     }
 
     @Transactional
-    public NotificationResponse createNewCommentNotification(Long userId, Long ticketId, Long commentId) {
+    public void createNewCommentNotification(Long userId, Long ticketId, Long commentId) {
         String title = "New Comment on Ticket";
         String message = "A new comment (#" + commentId + ") was added to your ticket #" + ticketId + ".";
-        return createSystemNotification(userId, title, message, NotificationType.NEW_COMMENT);
+        createEventNotification(userId, title, message, NotificationType.NEW_COMMENT);
     }
 
     @Transactional
@@ -121,13 +121,13 @@ public class NotificationService {
         return toResponse(notification);
     }
 
-    private NotificationResponse createSystemNotification(Long userId, String title, String message, NotificationType type) {
+    private void createEventNotification(Long userId, String title, String message, NotificationType type) {
         User recipient = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipient user not found."));
 
         NotificationPreference preference = notificationPreferenceService.getOrCreateForUser(recipient);
         if (!isAllowedByPreference(type, preference)) {
-            return null;
+            return;
         }
 
         Notification notification = new Notification();
@@ -135,9 +135,10 @@ public class NotificationService {
         notification.setTitle(title);
         notification.setMessage(message);
         notification.setType(type);
-        // isRead=false and createdAt are already handled by entity defaults.
+        notification.setRead(false);
+        notification.setCreatedAt(LocalDateTime.now());
 
-        return toResponse(notificationRepository.save(notification));
+        notificationRepository.save(notification);
     }
 
     private boolean isAllowedByPreference(NotificationType type, NotificationPreference preference) {
