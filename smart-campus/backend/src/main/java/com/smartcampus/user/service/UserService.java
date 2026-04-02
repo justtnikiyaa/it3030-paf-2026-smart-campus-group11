@@ -28,6 +28,7 @@ public class UserService {
                     existing.setGoogleId(googleId);
                     existing.setFullName(fullName);
                     existing.setPictureUrl(pictureUrl);
+                    ensureAtLeastUserRole(existing);
                     return userRepository.save(existing);
                 })
                 .orElseGet(() -> createNewUser(googleId, email, fullName, pictureUrl));
@@ -53,19 +54,27 @@ public class UserService {
     }
 
     private User createNewUser(String googleId, String email, String fullName, String pictureUrl) {
-        Role defaultRole = roleRepository.findByName(RoleName.USER)
-                .orElseGet(() -> {
-                    Role role = new Role();
-                    role.setName(RoleName.USER);
-                    return roleRepository.save(role);
-                });
-
         User user = new User();
         user.setGoogleId(googleId);
         user.setEmail(email);
         user.setFullName(fullName);
         user.setPictureUrl(pictureUrl);
-        user.getRoles().add(defaultRole);
+        ensureAtLeastUserRole(user);
         return userRepository.save(user);
+    }
+
+    private void ensureAtLeastUserRole(User user) {
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.getRoles().add(getOrCreateRole(RoleName.USER));
+        }
+    }
+
+    private Role getOrCreateRole(RoleName roleName) {
+        return roleRepository.findByName(roleName)
+                .orElseGet(() -> {
+                    Role role = new Role();
+                    role.setName(roleName);
+                    return roleRepository.save(role);
+                });
     }
 }
