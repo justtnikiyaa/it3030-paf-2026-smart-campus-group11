@@ -12,6 +12,7 @@ com\smartcampus\security\CustomOAuth2UserService.class
 com\smartcampus\user\service\UserService.class
 com\smartcampus\notification\entity\NotificationType.class
 com\smartcampus\notification\dto\CreateNotificationRequest.class
+com\smartcampus\notification\service\NotificationService$1.class
 com\smartcampus\notification\dto\NotificationResponse.class
 com\smartcampus\notification\entity\Notification.class
 com\smartcampus\auth\service\AuthService.class

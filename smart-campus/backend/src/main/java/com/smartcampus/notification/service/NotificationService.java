@@ -5,6 +5,7 @@ import com.smartcampus.notification.dto.CreateNotificationRequest;
 import com.smartcampus.notification.dto.NotificationResponse;
 import com.smartcampus.notification.dto.UnreadCountResponse;
 import com.smartcampus.notification.entity.Notification;
+import com.smartcampus.notification.entity.NotificationPreference;
 import com.smartcampus.notification.entity.NotificationType;
 import com.smartcampus.notification.repository.NotificationRepository;
 import com.smartcampus.user.entity.User;
@@ -24,6 +25,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final NotificationPreferenceService notificationPreferenceService;
 
     public List<NotificationResponse> getMyNotifications(String email) {
         User user = userService.getByEmailOrThrow(email);
@@ -123,6 +125,11 @@ public class NotificationService {
         User recipient = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipient user not found."));
 
+        NotificationPreference preference = notificationPreferenceService.getOrCreateForUser(recipient);
+        if (!isAllowedByPreference(type, preference)) {
+            return null;
+        }
+
         Notification notification = new Notification();
         notification.setRecipient(recipient);
         notification.setTitle(title);
@@ -131,6 +138,14 @@ public class NotificationService {
         // isRead=false and createdAt are already handled by entity defaults.
 
         return toResponse(notificationRepository.save(notification));
+    }
+
+    private boolean isAllowedByPreference(NotificationType type, NotificationPreference preference) {
+        return switch (type) {
+            case BOOKING_APPROVED, BOOKING_REJECTED -> preference.isBookingNotificationsEnabled();
+            case TICKET_STATUS_CHANGED -> preference.isTicketNotificationsEnabled();
+            case NEW_COMMENT -> preference.isCommentNotificationsEnabled();
+        };
     }
 
     private NotificationResponse toResponse(Notification notification) {

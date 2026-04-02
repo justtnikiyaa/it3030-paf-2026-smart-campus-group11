@@ -3,6 +3,7 @@ import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import AdminPage from "../pages/AdminPage";
 import NotificationsPage from "../pages/NotificationsPage";
+import NotificationSettingsPage from "../pages/NotificationSettingsPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import OAuthSuccessPage from "../pages/OAuthSuccessPage";
 import RoleProtectedRoute from "../components/auth/RoleProtectedRoute";
@@ -40,6 +41,14 @@ export const router = createBrowserRouter([
     element: (
       <RoleProtectedRoute allowRoles={["ADMIN"]}>
         <NotificationsPage />
+      </RoleProtectedRoute>
+    )
+  },
+  {
+    path: "/settings/notifications",
+    element: (
+      <RoleProtectedRoute allowRoles={["USER", "ADMIN"]}>
+        <NotificationSettingsPage />
       </RoleProtectedRoute>
     )
   },

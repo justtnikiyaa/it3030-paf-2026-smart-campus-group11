@@ -20,8 +20,14 @@ public class NotificationPreference {
     private User user;
 
     @Column(nullable = false)
-    private boolean inAppEnabled = true;
+    private boolean bookingNotificationsEnabled = true;
 
     @Column(nullable = false)
-    private boolean emailEnabled = false;
+    private boolean ticketNotificationsEnabled = true;
+
+    @Column(nullable = false)
+    private boolean commentNotificationsEnabled = true;
+
+    @Column(nullable = false)
+    private boolean emailNotificationsEnabled = false;
 }

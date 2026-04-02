@@ -33,6 +33,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/notification-preferences/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/auth/**").authenticated()
                         .anyRequest().permitAll()
                 )
