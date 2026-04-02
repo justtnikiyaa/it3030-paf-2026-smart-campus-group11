@@ -29,6 +29,12 @@ C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\not
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\security\CustomOAuth2UserService.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\security\OAuth2LoginSuccessHandler.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\SmartCampusApplication.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\ticket\controller\TicketController.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\ticket\dto\TicketResponse.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\ticket\entity\Ticket.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\ticket\entity\TicketStatus.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\ticket\repository\TicketRepository.java
+C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\ticket\service\TicketService.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\user\entity\Role.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\user\entity\RoleName.java
 C:\D Drive\Paf assignment\smart-campus\backend\src\main\java\com\smartcampus\user\entity\User.java

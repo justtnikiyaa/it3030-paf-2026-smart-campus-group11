@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/notification-preferences/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/bookings/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/tickets/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/auth/**").authenticated()
                         .anyRequest().permitAll()
                 )
