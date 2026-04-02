@@ -85,10 +85,19 @@ function ErrorState({ message, onRetry }) {
   );
 }
 
+function SuccessState({ message }) {
+  return (
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-2 text-xs font-medium text-emerald-700 dark:border-emerald-400/35 dark:bg-emerald-500/10 dark:text-emerald-300">
+      {message}
+    </div>
+  );
+}
+
 export default function NotificationPanel({
   open,
   loading,
   error,
+  success,
   notifications,
   unreadCount,
   onClose,
@@ -114,7 +123,9 @@ export default function NotificationPanel({
         </Button>
       </div>
 
-      <div className="mb-2 flex justify-end">
+      {success && <SuccessState message={success} />}
+
+      <div className="mb-2 mt-2 flex justify-end">
         <Button size="sm" variant="ghost" className="h-7 text-[11px]" onClick={onMarkAllRead} disabled={loading || notifications.length === 0}>
           <CircleCheckBig className="mr-1 h-3.5 w-3.5" />
           Mark all read

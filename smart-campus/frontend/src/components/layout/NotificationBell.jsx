@@ -10,6 +10,7 @@ export default function NotificationBell() {
   const [items, setItems] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const containerRef = useRef(null);
 
   const refreshUnreadCount = async () => {
@@ -28,7 +29,6 @@ export default function NotificationBell() {
       const data = await notificationService.getMyNotifications();
       setItems(data);
       setUnreadCount(data.filter((item) => item.unread).length);
-      // Keep backend count as source of truth.
       await refreshUnreadCount();
     } catch (err) {
       setError(err.message || "Failed to load notifications.");
@@ -40,6 +40,7 @@ export default function NotificationBell() {
   const toggleOpen = async () => {
     if (!open) {
       setOpen(true);
+      setSuccess("");
       await loadNotifications();
       return;
     }
@@ -50,6 +51,7 @@ export default function NotificationBell() {
     const target = items.find((item) => item.id === id);
     if (!target || !target.unread) return;
 
+    setSuccess("");
     setItems((prev) => prev.map((item) => (item.id === id ? { ...item, unread: false } : item)));
     setUnreadCount((prev) => Math.max(prev - 1, 0));
 
@@ -61,12 +63,25 @@ export default function NotificationBell() {
     }
   };
 
-  const onDelete = (id) => {
+  const onDelete = async (id) => {
     const target = items.find((item) => item.id === id);
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    if (!target) return;
 
-    if (target?.unread) {
-      setUnreadCount((prev) => Math.max(prev - 1, 0));
+    setError("");
+    setSuccess("");
+
+    try {
+      await notificationService.deleteNotification(id);
+      setItems((prev) => prev.filter((item) => item.id !== id));
+
+      if (target.unread) {
+        setUnreadCount((prev) => Math.max(prev - 1, 0));
+      }
+
+      setSuccess("Notification deleted.");
+      await refreshUnreadCount();
+    } catch (err) {
+      setError(err.message || "Failed to delete notification.");
     }
   };
 
@@ -74,11 +89,13 @@ export default function NotificationBell() {
     const hadUnread = items.some((item) => item.unread);
     if (!hadUnread) return;
 
+    setSuccess("");
     setItems((prev) => prev.map((item) => ({ ...item, unread: false })));
     setUnreadCount(0);
 
     try {
       await notificationService.markAllRead();
+      setSuccess("All notifications marked as read.");
     } catch (err) {
       setError(err.message || "Failed to mark all as read.");
       await loadNotifications();
@@ -123,6 +140,7 @@ export default function NotificationBell() {
         open={open}
         loading={loading}
         error={error}
+        success={success}
         notifications={items}
         unreadCount={unreadCount}
         onClose={() => setOpen(false)}

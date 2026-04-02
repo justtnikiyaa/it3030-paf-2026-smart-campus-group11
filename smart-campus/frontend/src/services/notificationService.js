@@ -85,6 +85,15 @@ const notificationService = {
     } catch (error) {
       throw new Error(toFriendlyError(error));
     }
+  },
+
+  deleteNotification: async (id) => {
+    try {
+      await api.delete(`/api/notifications/${id}`);
+      return { ok: true };
+    } catch (error) {
+      throw new Error(toFriendlyError(error));
+    }
   }
 };
 
