@@ -1,9 +1,8 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
-export default function ProtectedRoute({ children }) {
-  const { isAuthenticated, isAuthLoading } = useAuth();
-  const location = useLocation();
+export default function HomeRedirect() {
+  const { isAuthenticated, isAuthLoading, role } = useAuth();
 
   if (isAuthLoading) {
     return (
@@ -16,14 +15,8 @@ export default function ProtectedRoute({ children }) {
   }
 
   if (!isAuthenticated) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-        state={{ from: `${location.pathname}${location.search}${location.hash}` }}
-      />
-    );
+    return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return <Navigate to={role === "ADMIN" ? "/admin" : "/dashboard"} replace />;
 }

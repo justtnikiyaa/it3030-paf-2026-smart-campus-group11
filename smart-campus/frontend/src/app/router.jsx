@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import AdminPage from "../pages/AdminPage";
@@ -7,11 +7,22 @@ import NotificationSettingsPage from "../pages/NotificationSettingsPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import OAuthSuccessPage from "../pages/OAuthSuccessPage";
 import RoleProtectedRoute from "../components/auth/RoleProtectedRoute";
+import PublicRoute from "../components/auth/PublicRoute";
+import HomeRedirect from "../components/auth/HomeRedirect";
 
 export const router = createBrowserRouter([
-  { path: "/login", element: <LoginPage /> },
+  {
+    path: "/login",
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    )
+  },
   { path: "/unauthorized", element: <UnauthorizedPage /> },
   { path: "/oauth-success", element: <OAuthSuccessPage /> },
+
+  // USER routes
   {
     path: "/dashboard",
     element: (
@@ -28,6 +39,8 @@ export const router = createBrowserRouter([
       </RoleProtectedRoute>
     )
   },
+
+  // ADMIN routes
   {
     path: "/admin",
     element: (
@@ -44,6 +57,7 @@ export const router = createBrowserRouter([
       </RoleProtectedRoute>
     )
   },
+
   {
     path: "/settings/notifications",
     element: (
@@ -52,5 +66,6 @@ export const router = createBrowserRouter([
       </RoleProtectedRoute>
     )
   },
-  { path: "*", element: <Navigate to="/dashboard" replace /> }
+
+  { path: "*", element: <HomeRedirect /> }
 ]);

@@ -3,8 +3,6 @@ import authService from "../services/authService";
 
 export const AuthContext = createContext(null);
 
-const STORAGE_KEY = "smartcampus_auth_user";
-
 function mapBackendUser(me) {
   if (!me) return null;
 
@@ -27,33 +25,24 @@ export function AuthProvider({ children }) {
 
     if (!me) {
       setUser(null);
-      localStorage.removeItem(STORAGE_KEY);
       return null;
     }
 
     const normalized = mapBackendUser(me);
     setUser(normalized);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     return normalized;
   };
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
-      }
-    }
-
     let active = true;
 
     async function bootstrap() {
       try {
-        await refreshCurrentUser();
+        const current = await authService.getMe();
+        if (!active) return;
+        setUser(mapBackendUser(current));
       } catch {
-        // Keep local storage fallback if backend is temporarily unavailable.
+        if (active) setUser(null);
       } finally {
         if (active) setIsAuthLoading(false);
       }
@@ -78,7 +67,6 @@ export function AuthProvider({ children }) {
       await authService.logout();
     } finally {
       setUser(null);
-      localStorage.removeItem(STORAGE_KEY);
       setIsAuthLoading(false);
     }
   };
@@ -91,6 +79,7 @@ export function AuthProvider({ children }) {
       isAuthLoading,
       loginWithGoogle,
       finalizeOAuthLogin,
+      refreshCurrentUser,
       logout
     }),
     [user, isAuthLoading]
