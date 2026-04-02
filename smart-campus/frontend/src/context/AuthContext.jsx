@@ -5,14 +5,37 @@ export const AuthContext = createContext(null);
 
 const STORAGE_KEY = "smartcampus_auth_user";
 
-const demoUsers = {
-  USER: { id: -1, email: "user@campus.edu", fullName: "User", role: "USER" },
-  ADMIN: { id: -2, email: "admin@campus.edu", fullName: "Admin User", role: "ADMIN" }
-};
+function mapBackendUser(me) {
+  if (!me) return null;
+
+  const role = me.roles?.includes("ADMIN") ? "ADMIN" : "USER";
+  return {
+    id: me.id,
+    email: me.email,
+    fullName: me.fullName,
+    pictureUrl: me.pictureUrl,
+    role
+  };
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const refreshCurrentUser = async () => {
+    const me = await authService.getMe();
+
+    if (!me) {
+      setUser(null);
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+
+    const normalized = mapBackendUser(me);
+    setUser(normalized);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    return normalized;
+  };
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -28,21 +51,9 @@ export function AuthProvider({ children }) {
 
     async function bootstrap() {
       try {
-        const me = await authService.getMe();
-        if (!active || !me) return;
-
-        const role = me.roles?.includes("ADMIN") ? "ADMIN" : "USER";
-        const fromBackend = {
-          id: me.id,
-          email: me.email,
-          fullName: me.fullName,
-          pictureUrl: me.pictureUrl,
-          role
-        };
-        setUser(fromBackend);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(fromBackend));
+        await refreshCurrentUser();
       } catch {
-        // Keep localStorage user fallback if backend me check fails.
+        // Keep local storage fallback if backend is temporarily unavailable.
       } finally {
         if (active) setIsAuthLoading(false);
       }
@@ -54,19 +65,12 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const setUserFromOAuth = (oauthUser) => {
-    setUser(oauthUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(oauthUser));
-    setIsAuthLoading(false);
-  };
-
   const loginWithGoogle = () => authService.loginWithGoogle();
 
-  const loginAs = (role) => {
-    const demo = demoUsers[role];
-    setUser(demo);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(demo));
+  const finalizeOAuthLogin = async () => {
+    const current = await refreshCurrentUser();
     setIsAuthLoading(false);
+    return current;
   };
 
   const logout = async () => {
@@ -75,6 +79,7 @@ export function AuthProvider({ children }) {
     } finally {
       setUser(null);
       localStorage.removeItem(STORAGE_KEY);
+      setIsAuthLoading(false);
     }
   };
 
@@ -85,9 +90,8 @@ export function AuthProvider({ children }) {
       isAuthenticated: Boolean(user),
       isAuthLoading,
       loginWithGoogle,
-      loginAs,
-      logout,
-      setUserFromOAuth
+      finalizeOAuthLogin,
+      logout
     }),
     [user, isAuthLoading]
   );

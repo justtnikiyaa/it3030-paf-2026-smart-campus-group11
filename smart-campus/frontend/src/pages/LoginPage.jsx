@@ -1,16 +1,8 @@
 import { GraduationCap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
 
 export default function LoginPage() {
-  const { loginAs, loginWithGoogle } = useAuth();
-  const navigate = useNavigate();
-
-  const loginAndGo = (role) => {
-    loginAs(role);
-    navigate(role === "ADMIN" ? "/admin" : "/dashboard");
-  };
+  const { loginWithGoogle } = useAuth();
 
   return (
     <div className="relative min-h-screen overflow-hidden text-white">
@@ -50,24 +42,6 @@ export default function LoginPage() {
               </svg>
               Continue with Google
             </button>
-
-            <div className="mt-4 space-y-3">
-              <Button
-                variant="ghost"
-                className="h-11 w-full rounded-xl border border-white/55 bg-white/[0.03] text-[1.02rem] font-medium text-white hover:bg-white/12"
-                onClick={() => loginAndGo("USER")}
-              >
-                Demo User
-              </Button>
-
-              <Button
-                variant="ghost"
-                className="h-11 w-full rounded-xl border border-white/55 bg-white/[0.03] text-[1.02rem] font-medium text-white hover:bg-white/12"
-                onClick={() => loginAndGo("ADMIN")}
-              >
-                Demo Admin
-              </Button>
-            </div>
           </div>
         </main>
 
@@ -78,4 +52,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

@@ -1,26 +1,35 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 export default function OAuthSuccessPage() {
-  const [params] = useSearchParams();
   const navigate = useNavigate();
-  const { setUserFromOAuth } = useAuth();
+  const { finalizeOAuthLogin } = useAuth();
 
   useEffect(() => {
-    const email = params.get("email");
-    const fullName = params.get("fullName") || "User";
-    const pictureUrl = params.get("pictureUrl") || "";
-    const role = params.get("role") === "ADMIN" ? "ADMIN" : "USER";
+    let active = true;
 
-    if (!email) {
-      navigate("/login", { replace: true });
-      return;
+    async function finishLogin() {
+      try {
+        const currentUser = await finalizeOAuthLogin();
+        if (!active) return;
+
+        if (!currentUser) {
+          navigate("/login", { replace: true });
+          return;
+        }
+
+        navigate(currentUser.role === "ADMIN" ? "/admin" : "/dashboard", { replace: true });
+      } catch {
+        if (active) navigate("/login", { replace: true });
+      }
     }
 
-    setUserFromOAuth({ email, fullName, pictureUrl, role });
-    navigate(role === "ADMIN" ? "/admin" : "/dashboard", { replace: true });
-  }, [navigate, params, setUserFromOAuth]);
+    finishLogin();
+    return () => {
+      active = false;
+    };
+  }, [finalizeOAuthLogin, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
