@@ -5,6 +5,7 @@ import com.smartcampus.security.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,8 +38,17 @@ public class SecurityConfig {
                         // Admin-only APIs
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Module D APIs: notifications for USER/ADMIN
-                        .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
+                        // Module D - notifications (USER + ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/my").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/my/unread-count").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/notifications/*/read").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/notifications/my/read-all").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/notifications/*").hasAnyRole("USER", "ADMIN")
+
+                        // Module D - notifications (ADMIN only)
+                        .requestMatchers(HttpMethod.GET, "/api/notifications").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/notifications").hasRole("ADMIN")
 
                         // Auth APIs: authenticated users
                         .requestMatchers("/api/auth/**").authenticated()
