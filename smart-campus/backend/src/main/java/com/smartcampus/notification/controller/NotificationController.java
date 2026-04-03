@@ -4,6 +4,8 @@ import com.smartcampus.notification.dto.CreateNotificationRequest;
 import com.smartcampus.notification.dto.NotificationResponse;
 import com.smartcampus.notification.dto.UnreadCountResponse;
 import com.smartcampus.notification.service.NotificationService;
+import com.smartcampus.user.entity.User;
+import com.smartcampus.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final UserService userService;
 
     @GetMapping("/my")
     public ResponseEntity<List<NotificationResponse>> getMyNotifications(@AuthenticationPrincipal OAuth2User principal) {
@@ -46,6 +49,21 @@ public class NotificationController {
     public ResponseEntity<Void> markAllRead(@AuthenticationPrincipal OAuth2User principal) {
         String email = principal.getAttribute("email");
         notificationService.markAllAsRead(email);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OAuth2User principal
+    ) {
+        String email = principal.getAttribute("email");
+        User currentUser = userService.getByEmailOrThrow(email);
+
+        boolean isAdmin = principal.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+
+        notificationService.deleteNotification(id, currentUser.getId(), isAdmin);
         return ResponseEntity.noContent().build();
     }
 

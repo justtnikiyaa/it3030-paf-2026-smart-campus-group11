@@ -1,5 +1,6 @@
 package com.smartcampus.notification.service;
 
+import com.smartcampus.common.exception.ForbiddenException;
 import com.smartcampus.common.exception.ResourceNotFoundException;
 import com.smartcampus.notification.dto.CreateNotificationRequest;
 import com.smartcampus.notification.dto.NotificationResponse;
@@ -64,6 +65,19 @@ public class NotificationService {
             }
         }
         notificationRepository.saveAll(notifications);
+    }
+
+    @Transactional
+    public void deleteNotification(Long id, Long currentUserId, boolean isAdmin) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Notification not found."));
+
+        Long recipientId = notification.getRecipient().getId();
+        if (!isAdmin && !recipientId.equals(currentUserId)) {
+            throw new ForbiddenException("You can delete only your own notifications.");
+        }
+
+        notificationRepository.delete(notification);
     }
 
     @Transactional
