@@ -1,0 +1,209 @@
+﻿On branch feature-thisal
+Your branch is up to date with 'origin/feature-thisal'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   smart-campus/backend/.mvn/wrapper/maven-wrapper.properties
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/LICENSE
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/NOTICE
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/README.txt
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/bin/m2.conf
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/bin/mvn
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/bin/mvn.cmd
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/bin/mvnDebug
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/bin/mvnDebug.cmd
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/bin/mvnyjp
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/boot/plexus-classworlds-2.8.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/boot/plexus-classworlds.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/conf/logging/simplelogger.properties
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/conf/settings.xml
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/conf/toolchains.xml
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/aopalliance-1.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/aopalliance.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/commons-cli-1.8.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/commons-cli.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/commons-codec-1.17.1.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/commons-codec.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/ext/README.txt
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/ext/hazelcast/README.txt
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/ext/redisson/README.txt
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/failureaccess-1.0.2.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/failureaccess.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/guava-33.2.1-jre.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/guava.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/guice-5.1.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/guice.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/httpclient-4.5.14.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/httpclient.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/httpcore-4.4.16.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/httpcore.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jansi-2.4.1.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jansi-native/README.txt
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jansi-native/Windows/arm64/libjansi.so
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jansi-native/Windows/x86/jansi.dll
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jansi-native/Windows/x86_64/jansi.dll
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jansi.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/javax.annotation-api-1.3.2.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/javax.annotation-api.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/javax.inject-1.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/javax.inject.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jcl-over-slf4j-1.7.36.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/jcl-over-slf4j.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-artifact-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-builder-support-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-compat-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-core-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-embedder-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-model-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-model-builder-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-plugin-api-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-repository-metadata-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-api-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-connector-basic-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-impl-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-named-locks-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-provider-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-spi-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-transport-file-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-transport-http-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-transport-wagon-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-resolver-util-1.9.22.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-settings-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-settings-builder-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-shared-utils-3.4.2.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/maven-slf4j-provider-3.9.9.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/org.eclipse.sisu.inject-0.9.0.M3.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/org.eclipse.sisu.inject.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/org.eclipse.sisu.plexus-0.9.0.M3.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/org.eclipse.sisu.plexus.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-cipher-2.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-cipher.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-component-annotations-2.1.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-component-annotations.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-interpolation-1.27.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-interpolation.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-sec-dispatcher-2.0.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-sec-dispatcher.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-utils-3.5.1.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-utils.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-xml-3.0.1.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/plexus-xml.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/slf4j-api-1.7.36.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/slf4j-api.license
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/wagon-file-3.5.3.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/wagon-http-3.5.3.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/wagon-http-shared-3.5.3.jar
+	new file:   smart-campus/backend/.tools/apache-maven-3.9.9/lib/wagon-provider-api-3.5.3.jar
+	new file:   smart-campus/backend/build3.log
+	new file:   smart-campus/backend/build4.log
+	new file:   smart-campus/backend/build5.log
+	new file:   smart-campus/backend/build6.log
+	new file:   smart-campus/backend/mvnw
+	new file:   smart-campus/backend/mvnw.cmd
+	modified:   smart-campus/backend/pom.xml
+	modified:   smart-campus/backend/src/main/java/com/smartcampus/config/SecurityConfig.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/controller/ResourceController.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/dto/ResourceRequestDTO.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/dto/ResourceResponseDTO.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/model/Resource.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/model/enums/ResourceStatus.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/model/enums/ResourceType.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/repository/ResourceRepository.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/service/ResourceService.java
+	new file:   smart-campus/backend/src/main/java/com/smartcampus/resource/service/impl/ResourceServiceImpl.java
+	modified:   smart-campus/backend/src/main/resources/application.properties
+	new file:   smart-campus/backend/start-backend.ps1
+	modified:   smart-campus/backend/target/classes/application.properties
+	modified:   smart-campus/backend/target/classes/com/smartcampus/SmartCampusApplication.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/auth/dto/AuthMeResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/booking/controller/BookingController.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/booking/dto/BookingResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/booking/entity/Booking.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/booking/entity/BookingStatus.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/booking/repository/BookingRepository.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/common/exception/ForbiddenException.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/common/exception/GlobalExceptionHandler.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/common/exception/ResourceNotFoundException.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/config/SecurityConfig.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/controller/NotificationController.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/controller/NotificationPreferenceController.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/dto/CreateNotificationRequest.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/dto/NotificationPreferenceResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/dto/NotificationResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/dto/UnreadCountResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/dto/UpdateNotificationPreferenceRequest.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/entity/Notification.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/entity/NotificationPreference.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/entity/NotificationType.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/repository/NotificationPreferenceRepository.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/notification/repository/NotificationRepository.class
+	deleted:    smart-campus/backend/target/classes/com/smartcampus/notification/service/NotificationService$1.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/controller/ResourceController.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/dto/ResourceRequestDTO$ResourceRequestDTOBuilder.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/dto/ResourceRequestDTO.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/dto/ResourceResponseDTO$ResourceResponseDTOBuilder.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/dto/ResourceResponseDTO.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/model/Resource$ResourceBuilder.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/model/Resource.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/model/enums/ResourceStatus.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/model/enums/ResourceType.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/repository/ResourceRepository.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/service/ResourceService.class
+	new file:   smart-campus/backend/target/classes/com/smartcampus/resource/service/impl/ResourceServiceImpl.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/controller/TicketController.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/dto/TicketCommentResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/dto/TicketResponse.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/entity/Ticket.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/entity/TicketComment.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/entity/TicketStatus.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/repository/TicketCommentRepository.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/ticket/repository/TicketRepository.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/user/entity/Role.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/user/entity/RoleName.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/user/entity/User.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/user/repository/RoleRepository.class
+	modified:   smart-campus/backend/target/classes/com/smartcampus/user/repository/UserRepository.class
+	modified:   smart-campus/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+	modified:   smart-campus/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+	new file:   smart-campus/frontend/.env.local
+	new file:   smart-campus/frontend/build.log
+	new file:   smart-campus/frontend/build2.log
+	new file:   smart-campus/frontend/build_success.log
+	new file:   smart-campus/frontend/dist/assets/index-BIEPe2mW.css
+	deleted:    smart-campus/frontend/dist/assets/index-Bd_MCy24.css
+	deleted:    smart-campus/frontend/dist/assets/index-DVfN8mIs.js
+	new file:   smart-campus/frontend/dist/assets/index-sVkjRGla.js
+	modified:   smart-campus/frontend/dist/index.html
+	modified:   smart-campus/frontend/node_modules/.vite/deps/_metadata.json
+	modified:   smart-campus/frontend/node_modules/.vite/deps/axios.js.map
+	renamed:    smart-campus/frontend/node_modules/.vite/deps/chunk-PMKBOVCG.js -> smart-campus/frontend/node_modules/.vite/deps/chunk-BH3HGAO6.js
+	new file:   smart-campus/frontend/node_modules/.vite/deps/chunk-BH3HGAO6.js.map
+	renamed:    smart-campus/frontend/node_modules/.vite/deps/chunk-LPF6KSF2.js -> smart-campus/frontend/node_modules/.vite/deps/chunk-BODRGX6W.js
+	new file:   smart-campus/frontend/node_modules/.vite/deps/chunk-BODRGX6W.js.map
+	deleted:    smart-campus/frontend/node_modules/.vite/deps/chunk-LPF6KSF2.js.map
+	deleted:    smart-campus/frontend/node_modules/.vite/deps/chunk-PMKBOVCG.js.map
+	modified:   smart-campus/frontend/node_modules/.vite/deps/class-variance-authority.js.map
+	modified:   smart-campus/frontend/node_modules/.vite/deps/lucide-react.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/lucide-react.js.map
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react-dom.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react-dom_client.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react-dom_client.js.map
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react-router-dom.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react_jsx-dev-runtime.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react_jsx-dev-runtime.js.map
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react_jsx-runtime.js
+	modified:   smart-campus/frontend/node_modules/.vite/deps/react_jsx-runtime.js.map
+	modified:   smart-campus/frontend/node_modules/.vite/deps/tailwind-merge.js.map
+	modified:   smart-campus/frontend/src/app/router.jsx
+	new file:   smart-campus/frontend/src/components/resources/ResourceForm.jsx
+	new file:   smart-campus/frontend/src/pages/resources/ResourceCreatePage.jsx
+	new file:   smart-campus/frontend/src/pages/resources/ResourceDetailPage.jsx
+	new file:   smart-campus/frontend/src/pages/resources/ResourceEditPage.jsx
+	new file:   smart-campus/frontend/src/pages/resources/ResourcesPage.jsx
+	new file:   smart-campus/frontend/src/services/resourceService.js
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.git_status.txt
+
