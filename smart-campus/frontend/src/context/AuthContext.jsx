@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import authService from "../services/authService";
 
 export const AuthContext = createContext(null);
@@ -16,11 +16,15 @@ function mapBackendUser(me) {
   };
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  const refreshCurrentUser = async () => {
+  const refreshCurrentUser = useCallback(async () => {
     const me = await authService.getMe();
 
     if (!me) {
@@ -31,7 +35,7 @@ export function AuthProvider({ children }) {
     const normalized = mapBackendUser(me);
     setUser(normalized);
     return normalized;
-  };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -54,22 +58,39 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const loginWithGoogle = () => authService.loginWithGoogle();
+  const loginWithGoogle = useCallback(() => {
+    authService.loginWithGoogle();
+  }, []);
 
-  const finalizeOAuthLogin = async () => {
-    const current = await refreshCurrentUser();
+  const finalizeOAuthLogin = useCallback(async () => {
+    setIsAuthLoading(true);
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const current = await refreshCurrentUser();
+        if (current) {
+          setIsAuthLoading(false);
+          return current;
+        }
+      } catch {
+        // Retry a few times to handle session propagation timing.
+      }
+
+      await sleep(350);
+    }
+
     setIsAuthLoading(false);
-    return current;
-  };
+    return null;
+  }, [refreshCurrentUser]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await authService.logout();
     } finally {
       setUser(null);
       setIsAuthLoading(false);
     }
-  };
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -82,7 +103,14 @@ export function AuthProvider({ children }) {
       refreshCurrentUser,
       logout
     }),
-    [user, isAuthLoading]
+    [
+      user,
+      isAuthLoading,
+      loginWithGoogle,
+      finalizeOAuthLogin,
+      refreshCurrentUser,
+      logout
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
