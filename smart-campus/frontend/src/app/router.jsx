@@ -6,6 +6,10 @@ import NotificationsPage from "../pages/NotificationsPage";
 import NotificationSettingsPage from "../pages/NotificationSettingsPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import OAuthSuccessPage from "../pages/OAuthSuccessPage";
+import TicketsPage from "../pages/TicketsPage";
+import CreateTicketPage from "../pages/CreateTicketPage";
+import TicketDetailPage from "../pages/TicketDetailPage";
+import TechnicianDashboardPage from "../pages/TechnicianDashboardPage";
 import RoleProtectedRoute from "../components/auth/RoleProtectedRoute";
 import PublicRoute from "../components/auth/PublicRoute";
 import HomeRedirect from "../components/auth/HomeRedirect";
@@ -22,7 +26,7 @@ export const router = createBrowserRouter([
   { path: "/unauthorized", element: <UnauthorizedPage /> },
   { path: "/oauth-success", element: <OAuthSuccessPage /> },
 
-  // USER routes
+  // ── USER routes ───────────────────────────────────────────────────────────
   {
     path: "/dashboard",
     element: (
@@ -40,7 +44,43 @@ export const router = createBrowserRouter([
     )
   },
 
-  // ADMIN routes
+  // ── Module C: Ticket routes (USER + ADMIN + TECHNICIAN) ───────────────────
+  {
+    path: "/tickets",
+    element: (
+      <RoleProtectedRoute allowRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+        <TicketsPage />
+      </RoleProtectedRoute>
+    )
+  },
+  {
+    path: "/tickets/new",
+    element: (
+      <RoleProtectedRoute allowRoles={["USER", "ADMIN"]}>
+        <CreateTicketPage />
+      </RoleProtectedRoute>
+    )
+  },
+  {
+    path: "/tickets/:id",
+    element: (
+      <RoleProtectedRoute allowRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+        <TicketDetailPage />
+      </RoleProtectedRoute>
+    )
+  },
+
+  // ── Module C: Technician Dashboard ────────────────────────────────────────
+  {
+    path: "/technician",
+    element: (
+      <RoleProtectedRoute allowRoles={["TECHNICIAN", "ADMIN"]}>
+        <TechnicianDashboardPage />
+      </RoleProtectedRoute>
+    )
+  },
+
+  // ── ADMIN routes ──────────────────────────────────────────────────────────
   {
     path: "/admin",
     element: (
