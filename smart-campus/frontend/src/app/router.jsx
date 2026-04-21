@@ -4,6 +4,8 @@ import DashboardPage from "../pages/DashboardPage";
 import AdminPage from "../pages/AdminPage";
 import NotificationsPage from "../pages/NotificationsPage";
 import NotificationSettingsPage from "../pages/NotificationSettingsPage";
+import BookingsPage from "../pages/BookingsPage";
+import AdminBookingsPage from "../pages/AdminBookingsPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import OAuthSuccessPage from "../pages/OAuthSuccessPage";
 import RoleProtectedRoute from "../components/auth/RoleProtectedRoute";
@@ -32,6 +34,14 @@ export const router = createBrowserRouter([
     )
   },
   {
+    path: "/bookings",
+    element: (
+      <RoleProtectedRoute allowRoles={["USER"]}>
+        <BookingsPage />
+      </RoleProtectedRoute>
+    )
+  },
+  {
     path: "/notifications",
     element: (
       <RoleProtectedRoute allowRoles={["USER"]}>
@@ -46,6 +56,14 @@ export const router = createBrowserRouter([
     element: (
       <RoleProtectedRoute allowRoles={["ADMIN"]}>
         <AdminPage />
+      </RoleProtectedRoute>
+    )
+  },
+  {
+    path: "/admin/bookings",
+    element: (
+      <RoleProtectedRoute allowRoles={["ADMIN"]}>
+        <AdminBookingsPage />
       </RoleProtectedRoute>
     )
   },
