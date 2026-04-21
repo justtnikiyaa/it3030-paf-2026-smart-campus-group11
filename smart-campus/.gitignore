@@ -1,0 +1,14 @@
+# Java
+target/
+backend/target/
+*.class
+
+# Node
+node_modules/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
