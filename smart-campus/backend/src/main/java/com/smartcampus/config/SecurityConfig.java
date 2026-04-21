@@ -25,6 +25,7 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final com.smartcampus.user.service.UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,8 +35,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
 
+                        // Serve uploaded images publicly
+                        .requestMatchers("/uploads/**").permitAll()
+
                         // Admin-only APIs
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Technician dashboard – assigned tickets list
+                        .requestMatchers("/api/tickets/assigned").hasAnyRole("TECHNICIAN", "ADMIN")
+
+                        // Status update – technician or admin
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/tickets/*/status")
+                                .hasAnyRole("TECHNICIAN", "ADMIN")
 
                         // Module D APIs: notifications for USER/ADMIN
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
@@ -44,9 +55,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").authenticated()
 
                         // Additional protected APIs in this project
-                        .requestMatchers("/api/notification-preferences/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/bookings/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/tickets/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/notification-preferences", "/api/notification-preferences/**").hasAnyRole("USER", "ADMIN", "TECHNICIAN")
+                        .requestMatchers("/api/bookings", "/api/bookings/**").hasAnyRole("USER", "ADMIN", "TECHNICIAN")
+                        .requestMatchers("/api/tickets", "/api/tickets/**").hasAnyRole("USER", "ADMIN", "TECHNICIAN")
 
                         // Any other API route still requires login
                         .requestMatchers("/api/**").authenticated()
@@ -54,7 +65,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                                .oidcUserService(this.oidcUserService())
+                        )
                         .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .exceptionHandling(ex -> ex
@@ -73,5 +87,26 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+    @Bean
+    public org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService oidcUserService() {
+        return new org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService() {
+            @Override
+            public org.springframework.security.oauth2.core.oidc.user.OidcUser loadUser(org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest userRequest) throws org.springframework.security.oauth2.core.OAuth2AuthenticationException {
+                org.springframework.security.oauth2.core.oidc.user.OidcUser oidcUser = super.loadUser(userRequest);
+
+                String googleId = oidcUser.getSubject();
+                String email = oidcUser.getEmail();
+                String fullName = oidcUser.getFullName();
+                String pictureUrl = oidcUser.getPicture();
+
+                com.smartcampus.user.entity.User user = userService.findOrCreateGoogleUser(googleId, email, fullName, pictureUrl);
+
+                java.util.Set<org.springframework.security.core.GrantedAuthority> authorities = new java.util.HashSet<>(oidcUser.getAuthorities());
+                user.getRoles().forEach(role -> authorities.add(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + role.getName().name())));
+
+                return new org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser(authorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
+            }
+        };
     }
 }
