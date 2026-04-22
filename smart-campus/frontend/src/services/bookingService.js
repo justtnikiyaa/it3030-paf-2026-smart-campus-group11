@@ -42,19 +42,23 @@ export const bookingService = {
     return response.json();
   },
 
-  approveBooking: async (id) => {
+  approveBooking: async (id, adminReason) => {
     const response = await fetch(`${API_BASE_URL}/api/admin/bookings/${id}/approve`, {
       method: "PATCH",
-      credentials: "include"
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ adminReason })
     });
     if (!response.ok) throw new Error("Failed to approve booking");
     return response.json();
   },
 
-  rejectBooking: async (id) => {
+  rejectBooking: async (id, adminReason) => {
     const response = await fetch(`${API_BASE_URL}/api/admin/bookings/${id}/reject`, {
       method: "PATCH",
-      credentials: "include"
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ adminReason })
     });
     if (!response.ok) throw new Error("Failed to reject booking");
     return response.json();

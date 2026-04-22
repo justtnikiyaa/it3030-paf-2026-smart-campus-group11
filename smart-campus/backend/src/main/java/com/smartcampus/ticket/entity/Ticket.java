@@ -60,6 +60,10 @@ public class Ticket {
     @Column(length = 3000)
     private String resolutionNotes;
 
+    /** Preferred contact details provided by the ticket creator */
+    @Column(length = 300)
+    private String preferredContact;
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

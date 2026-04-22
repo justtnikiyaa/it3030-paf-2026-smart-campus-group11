@@ -1,5 +1,6 @@
 package com.smartcampus.booking.controller;
 
+import com.smartcampus.booking.dto.BookingDecisionRequest;
 import com.smartcampus.booking.dto.BookingRequest;
 import com.smartcampus.booking.dto.BookingResponse;
 import com.smartcampus.booking.service.BookingService;
@@ -51,12 +52,20 @@ public class BookingController {
     }
 
     @PatchMapping("/admin/bookings/{id}/approve")
-    public ResponseEntity<BookingResponse> approveBooking(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.approveBooking(id));
+    public ResponseEntity<BookingResponse> approveBooking(
+            @PathVariable Long id,
+            @RequestBody(required = false) BookingDecisionRequest request
+    ) {
+        String reason = request != null ? request.adminReason() : null;
+        return ResponseEntity.ok(bookingService.approveBooking(id, reason));
     }
 
     @PatchMapping("/admin/bookings/{id}/reject")
-    public ResponseEntity<BookingResponse> rejectBooking(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.rejectBooking(id));
+    public ResponseEntity<BookingResponse> rejectBooking(
+            @PathVariable Long id,
+            @RequestBody(required = false) BookingDecisionRequest request
+    ) {
+        String reason = request != null ? request.adminReason() : null;
+        return ResponseEntity.ok(bookingService.rejectBooking(id, reason));
     }
 }

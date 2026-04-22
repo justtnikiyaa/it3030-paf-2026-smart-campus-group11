@@ -44,6 +44,7 @@ public class TicketService {
         ticket.setResource(request.resource());
         ticket.setCategory(request.category());
         ticket.setPriority(request.priority());
+        ticket.setPreferredContact(request.preferredContact());
         ticket.setStatus(TicketStatus.OPEN);
 
         List<String> imageUrls = imageStorageService.storeImages(images);
@@ -213,6 +214,7 @@ public class TicketService {
                 ticket.getAssignedTechnician() != null ? ticket.getAssignedTechnician().getId() : null,
                 ticket.getAssignedTechnician() != null ? ticket.getAssignedTechnician().getFullName() : null,
                 ticket.getResolutionNotes(),
+                ticket.getPreferredContact(),
                 comments,
                 ticket.getCreatedAt(),
                 ticket.getUpdatedAt()

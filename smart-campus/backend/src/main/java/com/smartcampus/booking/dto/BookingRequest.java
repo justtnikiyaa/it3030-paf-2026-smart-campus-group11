@@ -13,6 +13,11 @@ public record BookingRequest(
         @NotBlank(message = "Resource is required")
         String resource,
 
+        @NotBlank(message = "Purpose is required")
+        String purpose,
+
+        Integer expectedAttendees,
+
         @NotNull(message = "Start time is required")
         @FutureOrPresent(message = "Start time must be in the present or future")
         LocalDateTime startTime,

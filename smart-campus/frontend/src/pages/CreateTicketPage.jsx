@@ -20,6 +20,7 @@ export default function CreateTicketPage() {
     resource: "",
     category: "OTHER",
     priority: "MEDIUM",
+    preferredContact: "",
   });
   const [images, setImages] = useState([]); // File[]
   const [previews, setPreviews] = useState([]); // URL strings
@@ -63,6 +64,7 @@ export default function CreateTicketPage() {
       formData.append("resource", form.resource);
       formData.append("category", form.category);
       formData.append("priority", form.priority);
+      if (form.preferredContact) formData.append("preferredContact", form.preferredContact);
       images.forEach((img) => formData.append("images", img));
 
       await ticketService.createTicket(formData);
@@ -178,6 +180,21 @@ export default function CreateTicketPage() {
                 className="w-full resize-none rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-600 dark:bg-[#0d1628] dark:text-white dark:placeholder-slate-500"
               />
               <p className="mt-1 text-right text-[11px] text-slate-400">{form.description.length}/2000</p>
+            </div>
+
+            {/* Preferred Contact */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Preferred Contact Details
+              </label>
+              <input
+                name="preferredContact"
+                value={form.preferredContact}
+                onChange={handleChange}
+                maxLength={300}
+                placeholder="e.g. 077-123-4567 or john@university.edu"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-600 dark:bg-[#0d1628] dark:text-white dark:placeholder-slate-500"
+              />
             </div>
 
             {/* Image Upload */}
