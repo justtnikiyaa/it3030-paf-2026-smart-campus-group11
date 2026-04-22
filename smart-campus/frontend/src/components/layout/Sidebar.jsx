@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
 import { navByRole } from "../../data/nav";
 import useAuth from "../../hooks/useAuth";
@@ -6,6 +6,7 @@ import { cn } from "../../lib/utils";
 
 export default function Sidebar({ open, onClose }) {
   const { role } = useAuth();
+  const location = useLocation();
   const links = navByRole[role] || [];
 
   return (
@@ -30,17 +31,20 @@ export default function Sidebar({ open, onClose }) {
             const Icon = item.icon;
             return (
               <NavLink
+                end
                 key={item.to + item.label}
                 to={item.to}
                 onClick={onClose}
-                className={({ isActive }) =>
-                  cn(
+                className={({ isActive }) => {
+                  const isResourcePath = item.to === "/resources" && location.pathname.includes("/resources");
+                  const active = isActive || isResourcePath;
+                  return cn(
                     "group flex items-center gap-2 rounded-xl px-2.5 py-2 text-[0.92rem] font-medium transition-all",
-                    isActive
+                    active
                       ? "border border-blue-300/70 bg-blue-50 text-blue-700 shadow-[0_6px_20px_-12px_rgba(37,99,235,0.6)] dark:border-cyan-300/55 dark:bg-blue-500/15 dark:text-blue-100 dark:shadow-[0_0_18px_rgba(37,99,235,0.35)]"
                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300/90 dark:hover:bg-white/5 dark:hover:text-slate-100"
                   )
-                }
+                }}
               >
                 <Icon className="h-3.5 w-3.5" />
                 <span>{item.label}</span>

@@ -49,6 +49,26 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for email: " + email));
     }
 
+    public User getByIdOrThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for id: " + id));
+    }
+
+    @Transactional
+    public void assignRole(Long userId, RoleName roleName) {
+        User user = getByIdOrThrow(userId);
+        user.getRoles().add(getOrCreateRole(roleName));
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public java.util.List<AuthMeResponse> getTechnicians() {
+        return userRepository.findByRoleName(RoleName.TECHNICIAN)
+                .stream()
+                .map(this::toAuthMeResponse)
+                .toList();
+    }
+
     public AuthMeResponse toAuthMeResponse(User user) {
         Set<String> roles = user.getRoles().stream()
                 .map(role -> role.getName().name())

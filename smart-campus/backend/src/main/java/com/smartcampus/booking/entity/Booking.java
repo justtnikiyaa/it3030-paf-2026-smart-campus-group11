@@ -20,6 +20,15 @@ public class Booking {
     @Column(nullable = false, length = 200)
     private String title;
 
+    @Column(nullable = false, length = 100)
+    private String resource;
+
+    @Column(nullable = false)
+    private LocalDateTime startTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;

@@ -6,12 +6,16 @@ export const AuthContext = createContext(null);
 function mapBackendUser(me) {
   if (!me) return null;
 
-  const role = me.roles?.includes("ADMIN") ? "ADMIN" : "USER";
+  let role = "USER";
+  if (me.roles?.includes("ADMIN")) role = "ADMIN";
+  else if (me.roles?.includes("TECHNICIAN")) role = "TECHNICIAN";
+
   return {
     id: me.id,
     email: me.email,
     fullName: me.fullName,
     pictureUrl: me.pictureUrl,
+    roles: me.roles ?? [],
     role
   };
 }
@@ -21,9 +25,16 @@ function sleep(ms) {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [user, setUser] = useState({
+    id: 1,
+    email: "local@smartcampus.com",
+    fullName: "Local Admin",
+    pictureUrl: "",
+    role: "ADMIN"
+  });
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
 
+<<<<<<< HEAD
   const refreshCurrentUser = useCallback(async () => {
     const me = await authService.getMe();
 
@@ -36,26 +47,15 @@ export function AuthProvider({ children }) {
     setUser(normalized);
     return normalized;
   }, []);
+=======
+  const refreshCurrentUser = async () => {
+    return user;
+  };
+>>>>>>> c556bddf476b891641516163429273e75f6a332d
 
   useEffect(() => {
-    let active = true;
-
-    async function bootstrap() {
-      try {
-        const current = await authService.getMe();
-        if (!active) return;
-        setUser(mapBackendUser(current));
-      } catch {
-        if (active) setUser(null);
-      } finally {
-        if (active) setIsAuthLoading(false);
-      }
-    }
-
-    bootstrap();
-    return () => {
-      active = false;
-    };
+    // Disabled authentication bootstrap for local UI testing
+    // bootstrap();
   }, []);
 
   const loginWithGoogle = useCallback(() => {

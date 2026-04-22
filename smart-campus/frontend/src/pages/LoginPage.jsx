@@ -5,13 +5,12 @@ export default function LoginPage() {
   const { loginWithGoogle } = useAuth();
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-white">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/campus-bg.png')" }}
-      />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_18%,rgba(147,51,234,0.28),transparent_34%),linear-gradient(120deg,rgba(7,18,42,0.78),rgba(12,20,42,0.35))]" />
-      <div className="absolute inset-0 backdrop-blur-[5px]" />
+    <div className="relative min-h-screen overflow-hidden bg-[#0a0f1c] text-white">
+      {/* Performance-optimized Pure CSS Mesh Gradient Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-900/40 via-[#0a0f1c] to-[#0a0f1c]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-indigo-900/30 via-transparent to-transparent" />
+      <div className="absolute left-1/2 top-1/2 -z-10 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-900/20 blur-[120px]" />
+      <div className="absolute right-0 top-0 -z-10 h-[600px] w-[600px] rounded-full bg-purple-900/20 blur-[100px]" />
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className="px-5 pt-5 sm:px-8 sm:pt-7">

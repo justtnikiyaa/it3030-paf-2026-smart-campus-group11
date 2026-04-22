@@ -6,7 +6,9 @@ public record TicketCommentResponse(
         Long id,
         Long ticketId,
         Long commenterUserId,
+        String commenterName,
+        String commenterPictureUrl,
         String message,
-        LocalDateTime createdAt
-) {
-}
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+) {}
