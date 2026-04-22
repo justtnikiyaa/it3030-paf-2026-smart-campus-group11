@@ -1,6 +1,7 @@
 package com.smartcampus.config;
 
 import com.smartcampus.security.CustomOAuth2UserService;
+import com.smartcampus.security.CustomOidcUserService;
 import com.smartcampus.security.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ public class SecurityConfig {
     };
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOidcUserService customOidcUserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
@@ -51,9 +53,9 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/resources/**").hasAnyRole("USER", "ADMIN")
 
                         // Additional protected APIs in this project
-                        .requestMatchers("/api/notification-preferences/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/bookings/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/tickets/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/notification-preferences", "/api/notification-preferences/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/bookings", "/api/bookings/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/tickets", "/api/tickets/**").hasAnyRole("USER", "ADMIN")
 
                         // Any other API route still requires login
                         .requestMatchers("/api/**").authenticated()
@@ -61,7 +63,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                                .oidcUserService(customOidcUserService)
+                        )
                         .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .exceptionHandling(ex -> ex
