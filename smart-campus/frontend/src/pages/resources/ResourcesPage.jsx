@@ -57,7 +57,7 @@ export default function ResourcesPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-200 tracking-tight">
+            <h1 className="text-3xl font-extrabold text-slate-700 dark:text-slate-200 tracking-tight">
               Facilities & Assets
             </h1>
             <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
@@ -152,7 +152,7 @@ export default function ResourcesPage() {
               >
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex justify-between items-start mb-4 gap-2">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-700 dark:text-white line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {resource.name}
                     </h3>
                     {getStatusBadge(resource.status)}

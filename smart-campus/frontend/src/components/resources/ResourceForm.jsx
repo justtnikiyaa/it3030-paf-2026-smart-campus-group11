@@ -62,8 +62,8 @@ export default function ResourceForm({ initialData, onSubmit, isLoading, mode = 
 
       <div className="max-w-3xl mx-auto pb-8 px-4 sm:px-6 lg:px-8 -mt-8">
         <div className="mb-8 flex justify-center">
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 text-center">
+          <h1 className="text-3xl font-extrabold text-slate-700 dark:text-white tracking-tight flex items-center gap-3">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400 text-center">
               {mode === "add" ? "Add New Resources" : "Edit Resource"}
             </span>
           </h1>

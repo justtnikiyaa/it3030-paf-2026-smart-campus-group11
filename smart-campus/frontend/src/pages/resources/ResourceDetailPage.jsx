@@ -152,7 +152,7 @@ export default function ResourceDetailPage() {
                     {resource.status.replace('_', ' ')}
                   </span>
                 </div>
-                <h1 className="text-4xl font-extrabold text-slate-900 dark:text-slate-200 tracking-tight leading-tight mb-2">
+                <h1 className="text-4xl font-extrabold text-slate-700 dark:text-slate-200 tracking-tight leading-tight mb-2">
                   {resource.name}
                 </h1>
               </div>
