@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppLayout from "../components/layout/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { BellRing, ShieldCheck, Users2, X } from "lucide-react";
+import { BellRing, ShieldCheck, Users2, X, Wrench, Loader2, UserCog } from "lucide-react";
 import notificationService from "../services/notificationService";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 export default function AdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,6 +13,48 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState(null);
+
+  // User management state
+  const [users, setUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [roleUpdating, setRoleUpdating] = useState(null);
+  const [roleFeedback, setRoleFeedback] = useState(null);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    setUsersLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/users`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
+  const handleAssignRole = async (userId, roleName) => {
+    setRoleUpdating(userId);
+    setRoleFeedback(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/role?roleName=${roleName}`, {
+        method: "PUT",
+        credentials: "include"
+      });
+      if (!res.ok) throw new Error("Failed to assign role");
+      setRoleFeedback({ userId, type: 'success', text: `${roleName} role assigned!` });
+      fetchUsers();
+    } catch (err) {
+      setRoleFeedback({ userId, type: 'error', text: err.message });
+    } finally {
+      setRoleUpdating(null);
+    }
+  };
 
   const handleSendAlert = async (e) => {
     e.preventDefault();
@@ -30,6 +74,15 @@ export default function AdminPage() {
       setIsSubmitting(false);
     }
   };
+
+  const getRoleBadgeClass = (role) => {
+    switch (role) {
+      case 'ADMIN': return 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300';
+      case 'TECHNICIAN': return 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300';
+      default: return 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300';
+    }
+  };
+
   return (
     <AppLayout title="Admin">
       <div className="space-y-4">
@@ -68,6 +121,95 @@ export default function AdminPage() {
             </div>
 
             <Button onClick={() => setIsModalOpen(true)}>Send Campus Alert</Button>
+          </CardContent>
+        </Card>
+
+        {/* ── User Role Management ─────────────────────────────────────────── */}
+        <Card className="border-slate-200/80 bg-white/90 backdrop-blur-sm dark:border-cyan-300/20 dark:bg-[#111a2d]/90">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <UserCog className="h-5 w-5 text-indigo-500" />
+              <CardTitle className="text-xl">User Role Management</CardTitle>
+            </div>
+            <CardDescription>
+              View all registered users and assign roles. Users must log in via Google first to appear here.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {usersLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+              </div>
+            ) : users.length === 0 ? (
+              <p className="py-6 text-center text-sm text-slate-500 dark:text-slate-400">
+                No users registered yet. Users appear here after they sign in with Google.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {users.map((user) => {
+                  const roles = Array.isArray(user.roles) ? user.roles : (user.roles ? Object.values(user.roles) : []);
+                  const isTechnician = roles.includes('TECHNICIAN');
+                  const isAdmin = roles.includes('ADMIN');
+
+                  return (
+                    <div
+                      key={user.id}
+                      className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-slate-50/60 p-3 dark:border-cyan-300/15 dark:bg-[#0d1628]/60"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {user.pictureUrl ? (
+                          <img src={user.pictureUrl} alt="" className="h-9 w-9 rounded-full ring-2 ring-white dark:ring-slate-700" />
+                        ) : (
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-sm font-bold text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                            {user.fullName?.charAt(0) || '?'}
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{user.fullName}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {/* Role badges */}
+                        <div className="flex gap-1">
+                          {roles.map((role) => (
+                            <span key={role} className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${getRoleBadgeClass(role)}`}>
+                              {role}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Action buttons */}
+                        {!isTechnician && !isAdmin && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 px-2.5 text-[11px] border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-600 dark:text-amber-400 dark:hover:bg-amber-900/20"
+                            disabled={roleUpdating === user.id}
+                            onClick={() => handleAssignRole(user.id, 'TECHNICIAN')}
+                          >
+                            {roleUpdating === user.id ? (
+                              <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                            ) : (
+                              <Wrench className="h-3 w-3 mr-1" />
+                            )}
+                            Make Technician
+                          </Button>
+                        )}
+
+                        {/* Feedback for this user */}
+                        {roleFeedback?.userId === user.id && (
+                          <span className={`text-[11px] font-medium ${roleFeedback.type === 'success' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+                            {roleFeedback.text}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
