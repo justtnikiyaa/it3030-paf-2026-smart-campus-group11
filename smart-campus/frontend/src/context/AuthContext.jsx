@@ -34,7 +34,6 @@ export function AuthProvider({ children }) {
   });
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
-<<<<<<< HEAD
   const refreshCurrentUser = useCallback(async () => {
     const me = await authService.getMe();
 
@@ -47,11 +46,6 @@ export function AuthProvider({ children }) {
     setUser(normalized);
     return normalized;
   }, []);
-=======
-  const refreshCurrentUser = async () => {
-    return user;
-  };
->>>>>>> c556bddf476b891641516163429273e75f6a332d
 
   useEffect(() => {
     // Disabled authentication bootstrap for local UI testing
