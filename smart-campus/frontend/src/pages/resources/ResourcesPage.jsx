@@ -137,8 +137,8 @@ export default function ResourcesPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
           </div>
         ) : resources.length === 0 ? (
-          <div className="text-center py-16 bg-white dark:bg-[#111c33] rounded-2xl border border-slate-200 dark:border-cyan-300/20 border-dashed">
-            <LayoutGrid className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
+          <div className="text-center py-16 bg-white dark:bg-[#111c33] rounded-2xl border border-slate-200 dark:border-cyan-300/20 border-dashed group transition-colors hover:border-slate-300 dark:hover:border-cyan-300/40">
+            <LayoutGrid className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" />
             <h3 className="mt-4 text-lg font-medium text-slate-900 dark:text-white">No resources found</h3>
             <p className="mt-1 text-slate-500 dark:text-slate-400">Try adjusting your filters to find what you're looking for.</p>
           </div>
