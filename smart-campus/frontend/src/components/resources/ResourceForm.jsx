@@ -190,7 +190,7 @@ export default function ResourceForm({ initialData, onSubmit, isLoading, mode = 
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="px-6 py-3 font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                className="px-6 py-3 font-semibold text-red-600 dark:text-red-400 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50 rounded-xl transition-colors"
               >
                 Cancel
               </button>
