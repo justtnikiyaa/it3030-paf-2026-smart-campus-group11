@@ -1,5 +1,6 @@
 package com.smartcampus.booking.service;
 
+import com.smartcampus.booking.dto.BookingRequest;
 import com.smartcampus.booking.dto.BookingResponse;
 import com.smartcampus.booking.entity.Booking;
 import com.smartcampus.booking.entity.BookingStatus;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +25,30 @@ public class BookingService {
     private final NotificationService notificationService;
 
     @Transactional
-    public BookingResponse createBooking(String ownerEmail, String title) {
+    public BookingResponse createBooking(String ownerEmail, BookingRequest request) {
+        if (!request.startTime().isBefore(request.endTime())) {
+            throw new IllegalArgumentException("Start time must be before end time");
+        }
+
+        boolean hasConflict = bookingRepository.existsByResourceAndStatusInAndStartTimeLessThanAndEndTimeGreaterThan(
+                request.resource(),
+                List.of(BookingStatus.PENDING, BookingStatus.APPROVED),
+                request.endTime(),
+                request.startTime()
+        );
+
+        if (hasConflict) {
+            throw new IllegalStateException("The requested resource is already booked for the given time range.");
+        }
+
         User owner = userService.getByEmailOrThrow(ownerEmail);
 
         Booking booking = new Booking();
         booking.setOwner(owner);
-        booking.setTitle(title);
+        booking.setTitle(request.title());
+        booking.setResource(request.resource());
+        booking.setStartTime(request.startTime());
+        booking.setEndTime(request.endTime());
         booking.setStatus(BookingStatus.PENDING);
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
@@ -36,10 +56,50 @@ public class BookingService {
         return toResponse(bookingRepository.save(booking));
     }
 
+    public List<BookingResponse> getMyBookings(String ownerEmail) {
+        User owner = userService.getByEmailOrThrow(ownerEmail);
+        return bookingRepository.findByOwnerIdOrderByCreatedAtDesc(owner.getId())
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public List<BookingResponse> getAllBookings() {
+        return bookingRepository.findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional
+    public BookingResponse cancelBooking(Long bookingId, String ownerEmail) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
+
+        User user = userService.getByEmailOrThrow(ownerEmail);
+        boolean isAdmin = user.getRoles().stream().anyMatch(r -> r.getName() == com.smartcampus.user.entity.RoleName.ADMIN);
+
+        if (!isAdmin && !booking.getOwner().getEmail().equals(ownerEmail)) {
+            throw new IllegalStateException("You are not authorized to cancel this booking.");
+        }
+
+        if (booking.getStatus() == BookingStatus.REJECTED || booking.getStatus() == BookingStatus.CANCELLED) {
+            throw new IllegalStateException("Cannot cancel a booking that is already rejected or cancelled.");
+        }
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        booking.setUpdatedAt(LocalDateTime.now());
+        return toResponse(bookingRepository.save(booking));
+    }
+
     @Transactional
     public BookingResponse approveBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new IllegalStateException("Only pending bookings can be approved.");
+        }
 
         booking.setStatus(BookingStatus.APPROVED);
         booking.setUpdatedAt(LocalDateTime.now());
@@ -56,6 +116,10 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
 
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new IllegalStateException("Only pending bookings can be rejected.");
+        }
+
         booking.setStatus(BookingStatus.REJECTED);
         booking.setUpdatedAt(LocalDateTime.now());
         Booking saved = bookingRepository.save(booking);
@@ -70,6 +134,9 @@ public class BookingService {
         return new BookingResponse(
                 booking.getId(),
                 booking.getTitle(),
+                booking.getResource(),
+                booking.getStartTime(),
+                booking.getEndTime(),
                 booking.getStatus(),
                 booking.getOwner().getId(),
                 booking.getCreatedAt(),

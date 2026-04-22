@@ -1,0 +1,54 @@
+﻿
+> smart-campus-frontend@0.1.0 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 44 modules transformed.
+node.exe : [31mΓ£ù[39m Build 
+failed in 1.31s
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo          : Not 
+   Specified: ([31mΓ£ù[39m Bui  
+  ld failed in 1.31s:String) []   
+ , RemoteException
+    + FullyQualifiedErrorId : Nat 
+   iveCommandError
+ 
+[31merror during build:
+[31mCould not resolve 
+"../../../context/AuthContext" 
+from "src/pages/resources/Resource
+DetailPage.jsx"[31m
+file: [36mD:/Projects/GitHub/it30
+30-paf-2026-smart-campus-group11/s
+mart-campus/frontend/src/pages/res
+ources/ResourceDetailPage.jsx[31m
+    at getRollupError (file:///D:/
+Projects/GitHub/it3030-paf-2026-sm
+art-campus-group11/smart-campus/fr
+ontend/node_modules/rollup/dist/es
+/shared/parseAst.js:406:41)
+    at error (file:///D:/Projects/
+GitHub/it3030-paf-2026-smart-campu
+s-group11/smart-campus/frontend/no
+de_modules/rollup/dist/es/shared/p
+arseAst.js:402:42)
+    at ModuleLoader.handleInvalidR
+esolvedId (file:///D:/Projects/Git
+Hub/it3030-paf-2026-smart-campus-g
+roup11/smart-campus/frontend/node_
+modules/rollup/dist/es/shared/node
+-entry.js:21765:24)
+    at file:///D:/Projects/GitHub/
+it3030-paf-2026-smart-campus-group
+11/smart-campus/frontend/node_modu
+les/rollup/dist/es/shared/node-ent
+ry.js:21725:26[39m
