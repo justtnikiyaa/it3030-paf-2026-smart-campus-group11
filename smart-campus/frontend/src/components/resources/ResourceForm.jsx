@@ -197,7 +197,7 @@ export default function ResourceForm({ initialData, onSubmit, isLoading, mode = 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex items-center px-6 py-3 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 disabled:opacity-70 transition-all shadow-md"
+                className="flex items-center px-6 py-3 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 disabled:opacity-70 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 transform"
               >
                 {isLoading ? (
                   <>
