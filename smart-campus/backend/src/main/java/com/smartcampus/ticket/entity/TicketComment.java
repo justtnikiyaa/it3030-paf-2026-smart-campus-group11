@@ -30,4 +30,7 @@ public class TicketComment {
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    /** Set when the comment is edited; null means never edited */
+    private LocalDateTime updatedAt;
 }

@@ -1,14 +1,26 @@
-# Java
-target/
-backend/target/
-*.class
+# Java / Maven
+**/target/
+**/*.class
+**/maven/
+apache-maven.zip
+**/.tools/
+*.log
 
-# Node
-node_modules/
-
-# Environment
+# Node / Frontend
+**/node_modules/
+**/dist/
 .env
+.env.local
 
-# IDE
-.vscode/
+# IDEs
 .idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Specific
+backend/uploads/

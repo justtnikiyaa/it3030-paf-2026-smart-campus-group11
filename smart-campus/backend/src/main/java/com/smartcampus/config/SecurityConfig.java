@@ -36,8 +36,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
 
+                        // Serve uploaded images publicly
+                        .requestMatchers("/uploads/**").permitAll()
+
                         // Admin-only APIs
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Technician dashboard – assigned tickets list
+                        .requestMatchers("/api/tickets/assigned").hasAnyRole("TECHNICIAN", "ADMIN")
+
+                        // Status update – technician or admin
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/tickets/*/status")
+                                .hasAnyRole("TECHNICIAN", "ADMIN")
 
                         // Module D APIs: notifications for USER/ADMIN
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
@@ -53,9 +63,9 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/resources/**").hasAnyRole("USER", "ADMIN")
 
                         // Additional protected APIs in this project
-                        .requestMatchers("/api/notification-preferences", "/api/notification-preferences/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/bookings", "/api/bookings/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/tickets", "/api/tickets/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/notification-preferences", "/api/notification-preferences/**").hasAnyRole("USER", "ADMIN", "TECHNICIAN")
+                        .requestMatchers("/api/bookings", "/api/bookings/**").hasAnyRole("USER", "ADMIN", "TECHNICIAN")
+                        .requestMatchers("/api/tickets", "/api/tickets/**").hasAnyRole("USER", "ADMIN", "TECHNICIAN")
 
                         // Any other API route still requires login
                         .requestMatchers("/api/**").authenticated()

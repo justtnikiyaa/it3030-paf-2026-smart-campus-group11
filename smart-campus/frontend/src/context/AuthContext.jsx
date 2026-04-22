@@ -6,12 +6,16 @@ export const AuthContext = createContext(null);
 function mapBackendUser(me) {
   if (!me) return null;
 
-  const role = me.roles?.includes("ADMIN") ? "ADMIN" : "USER";
+  let role = "USER";
+  if (me.roles?.includes("ADMIN")) role = "ADMIN";
+  else if (me.roles?.includes("TECHNICIAN")) role = "TECHNICIAN";
+
   return {
     id: me.id,
     email: me.email,
     fullName: me.fullName,
     pictureUrl: me.pictureUrl,
+    roles: me.roles ?? [],
     role
   };
 }
