@@ -1,0 +1,89 @@
+@baseUrl = http://localhost:8081
+# ⚠️ REPLACE THE VALUE BELOW WITH YOUR JSESSIONID FROM THE BROWSER ⚠️
+@cookie = JSESSIONID=PASTE_YOUR_COOKIE_HERE
+
+### ==========================================
+### MODULE 1: AUTHENTICATION
+### ==========================================
+
+### 1.1 Get Current Logged-In User
+GET {{baseUrl}}/api/auth/me
+Cookie: {{cookie}}
+
+
+### ==========================================
+### MODULE 2: BOOKINGS
+### ==========================================
+
+### 2.1 Create a Booking
+POST {{baseUrl}}/api/bookings
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "resourceId": 1,
+  "startTime": "2026-04-25T09:00:00",
+  "endTime": "2026-04-25T11:00:00",
+  "purpose": "Group Assignment Meeting"
+}
+
+### 2.2 Get My Bookings
+GET {{baseUrl}}/api/bookings/me
+Cookie: {{cookie}}
+
+### 2.3 Approve a Booking (Admin Only)
+# Note: Ensure booking ID '1' exists.
+PATCH {{baseUrl}}/api/admin/bookings/1/approve
+Cookie: {{cookie}}
+
+
+### ==========================================
+### MODULE 3: TICKETS & COMMENTS
+### ==========================================
+
+### 3.1 Create a Maintenance Ticket
+POST {{baseUrl}}/api/tickets
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "title": "Broken AC in Library",
+  "description": "The air conditioner on the second floor is leaking.",
+  "location": "Library 2nd Floor",
+  "priority": "HIGH"
+}
+
+### 3.2 Add a Comment to the Ticket
+POST {{baseUrl}}/api/tickets/1/comments
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "content": "Technician has been notified and is on the way."
+}
+
+### 3.3 Update Ticket Status (Technician/Admin)
+PUT {{baseUrl}}/api/tickets/1/status
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}
+
+
+### ==========================================
+### MODULE 4: NOTIFICATIONS (Member 4 specific)
+### ==========================================
+
+### 4.1 Get Unread Notification Count
+GET {{baseUrl}}/api/notifications/my/unread-count
+Cookie: {{cookie}}
+
+### 4.2 Get All My Notifications
+GET {{baseUrl}}/api/notifications/my
+Cookie: {{cookie}}
+
+### 4.3 Mark All Notifications as Read
+PATCH {{baseUrl}}/api/notifications/my/read-all
+Cookie: {{cookie}}
