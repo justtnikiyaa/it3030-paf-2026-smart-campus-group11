@@ -24,3 +24,7 @@ Thumbs.db
 
 # Project Specific
 backend/uploads/
+out.log
+seed.mjs
+api-tests.http
+*.txt
