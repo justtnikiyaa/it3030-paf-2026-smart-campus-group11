@@ -276,7 +276,7 @@ Smart-Campus-Operations-Hub/
 
 ## 👥 Team & Contributions
 
-This project was developed as a group assignment for the **Platform-based Application Framework (PAF)** module.
+
 
 | Member ID |  Name                 | Responsibility |
 |-----------|-----------------------|----------------|
