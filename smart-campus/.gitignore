@@ -24,3 +24,7 @@ Thumbs.db
 
 # Project Specific
 backend/uploads/
+out.log
+
+# Report & documentation files (kept locally only)
+/*.txt

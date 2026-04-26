@@ -223,9 +223,7 @@ Smart-Campus-Operations-Hub/
 │   │
 │   └── api-tests.http             # REST Client API test suite
 │
-├── smart_campus_project_report.md # 📄 Full project report
-├── smart_campus_diagrams.md       # 📊 Architecture diagrams
-└── postman_testing_guide.md       # 🧪 API testing documentation
+└── .gitignore                     # Git ignore rules
 ```
 
 ---
