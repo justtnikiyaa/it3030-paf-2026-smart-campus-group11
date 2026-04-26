@@ -287,8 +287,3 @@ This project was developed as a group assignment for the **Platform-based Applic
 
 ---
 
-<div align="center">
-
-**Built with ❤️ for SLIIT — PAF Assignment 2026**
-
-</div>
