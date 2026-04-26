@@ -89,10 +89,11 @@ I developed the core notification system to keep users engaged and informed. Thi
 ### 7.4 Testing & API Evidence
 I created a comprehensive `.http` test suite (`api-tests.http`) that allows automated execution of all critical API endpoints directly within the IDE. This suite handles the OAuth `JSESSIONID` integration and demonstrates successful execution of key workflows (OAuth authentication, RBAC authorization, Ticket creation, Booking flows, and Notification retrieval).
 
-## 8. Running System & Evidence
+## 8. System Demonstration & Evidence
 As per the assignment requirements:
 * **Running System:** The project is fully demonstrable locally. Both the Vite frontend (port 5173) and the Spring Boot backend (port 8081) have been configured to run seamlessly on the local environment.
-* **Evidence:** Screenshots demonstrating the successful execution of the aforementioned API workflows, as well as the OAuth login process, are attached as evidence alongside this report.
+* **API & OAuth Evidence:** Screenshots demonstrating the successful execution of the aforementioned API workflows and the Google OAuth login process are attached as evidence alongside this report.
+* **Version Control (GitHub):** Screenshots of the GitHub repository's commit history and insights are included to demonstrate active collaboration, version control best practices, and continuous integration throughout the development lifecycle.
 
 ## 9. Conclusion
 The Smart Campus Operations Hub successfully demonstrates a functional, integrated solution for managing university facilities and operations. Through effective teamwork, we developed a system that covers booking, ticketing, communication, and security. The modular architecture ensures that the system is scalable and can be expanded in the future, providing a solid foundation for a truly "smart" campus environment.
