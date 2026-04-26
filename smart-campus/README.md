@@ -278,12 +278,13 @@ Smart-Campus-Operations-Hub/
 
 This project was developed as a group assignment for the **Platform-based Application Framework (PAF)** module.
 
-| Member | Responsibility |
-|--------|---------------|
-| **Member 1** | 📅 Booking Management Module |
-| **Member 2** | 🎫 Maintenance Ticket System |
-| **Member 3** | 💬 Ticket Commenting System |
-| **Member 4** | 🔐 Authentication, 🛡️ RBAC, 🔔 Notifications |
+| Member ID |  Name                 | Responsibility |
+|-----------|-----------------------|----------------|
+| **IT23680098** | **Kawishwara H W T** |  📅 Booking Management Module |
+| **IT23643390** | **Dewranga K.K** |  🎫 Maintenance Ticket System |
+| **IT23578982** | **G.T.H Wickramarathne** | 💬 Resource Management System |
+| **IT23734920** | **W.M.N Dulavin** | 🔐 Authentication, 🛡️ RBAC, 🔔 Notifications |
 
 ---
 
+ 
