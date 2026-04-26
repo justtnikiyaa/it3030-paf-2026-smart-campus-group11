@@ -23,6 +23,14 @@ public class Booking {
     @Column(nullable = false, length = 100)
     private String resource;
 
+    @Column(nullable = false, length = 500)
+    private String purpose;
+
+    private Integer expectedAttendees;
+
+    @Column(length = 1000)
+    private String adminReason;
+
     @Column(nullable = false)
     private LocalDateTime startTime;
 

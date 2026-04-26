@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AppLayout from "../components/layout/AppLayout";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Calendar as CalendarIcon, Clock, MapPin, CheckCircle, XCircle } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, MapPin, CheckCircle, XCircle, Users, FileText, MessageSquare } from "lucide-react";
 import { bookingService } from "../services/bookingService";
 
 export default function AdminBookingsPage() {
@@ -25,8 +25,10 @@ export default function AdminBookingsPage() {
   };
 
   const handleApprove = async (id) => {
+    const reason = window.prompt("Enter a reason for approval (optional):");
+    if (reason === null) return; // user cancelled
     try {
-      await bookingService.approveBooking(id);
+      await bookingService.approveBooking(id, reason || null);
       fetchBookings();
     } catch (err) {
       console.error(err);
@@ -34,8 +36,10 @@ export default function AdminBookingsPage() {
   };
 
   const handleReject = async (id) => {
+    const reason = window.prompt("Enter a reason for rejection:");
+    if (reason === null) return; // user cancelled
     try {
-      await bookingService.rejectBooking(id);
+      await bookingService.rejectBooking(id, reason || null);
       fetchBookings();
     } catch (err) {
       console.error(err);
@@ -98,7 +102,28 @@ export default function AdminBookingsPage() {
                           {new Date(booking.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
+                      {booking.purpose && (
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-violet-500" />
+                          <span>{booking.purpose}</span>
+                        </div>
+                      )}
+                      {booking.expectedAttendees && (
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-teal-500" />
+                          <span>{booking.expectedAttendees} attendees</span>
+                        </div>
+                      )}
                     </div>
+                    {booking.adminReason && (
+                      <div className="mt-3 p-2 rounded-lg bg-slate-100 dark:bg-slate-800/50 text-xs text-slate-600 dark:text-slate-300">
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <MessageSquare className="w-3 h-3" />
+                          <span className="font-semibold">Admin Reason:</span>
+                        </div>
+                        {booking.adminReason}
+                      </div>
+                    )}
                   </div>
                   
                   {booking.status === 'PENDING' && (

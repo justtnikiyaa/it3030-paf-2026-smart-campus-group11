@@ -41,4 +41,12 @@ public class AdminUserController {
     public ResponseEntity<java.util.List<com.smartcampus.auth.dto.AuthMeResponse>> getTechnicians() {
         return ResponseEntity.ok(userService.getTechnicians());
     }
+
+    /**
+     * Get all registered users.
+     */
+    @GetMapping
+    public ResponseEntity<java.util.List<com.smartcampus.auth.dto.AuthMeResponse>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
 }

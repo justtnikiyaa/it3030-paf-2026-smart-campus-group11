@@ -5,7 +5,7 @@ import AppLayout from "../components/layout/AppLayout";
 import TicketCommentSection from "../components/tickets/TicketCommentSection";
 import ticketService from "../services/ticketService";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
 
 const STATUS_STYLES = {
   OPEN:        "bg-blue-500/15 text-blue-700 dark:text-blue-300",

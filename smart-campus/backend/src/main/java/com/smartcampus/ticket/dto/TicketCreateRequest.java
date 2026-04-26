@@ -22,5 +22,8 @@ public record TicketCreateRequest(
         TicketCategory category,
 
         @NotNull(message = "Priority is required")
-        TicketPriority priority
+        TicketPriority priority,
+
+        @Size(max = 300, message = "Contact details must not exceed 300 characters")
+        String preferredContact
 ) {}

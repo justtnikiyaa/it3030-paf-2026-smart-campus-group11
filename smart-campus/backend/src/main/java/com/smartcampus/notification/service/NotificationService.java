@@ -1,5 +1,6 @@
 package com.smartcampus.notification.service;
 
+import com.smartcampus.common.exception.ForbiddenException;
 import com.smartcampus.common.exception.ResourceNotFoundException;
 import com.smartcampus.notification.dto.CreateNotificationRequest;
 import com.smartcampus.notification.dto.NotificationResponse;
@@ -67,6 +68,19 @@ public class NotificationService {
     }
 
     @Transactional
+    public void deleteNotification(Long id, Long currentUserId, boolean isAdmin) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Notification not found."));
+
+        Long recipientId = notification.getRecipient().getId();
+        if (!isAdmin && !recipientId.equals(currentUserId)) {
+            throw new ForbiddenException("You can delete only your own notifications.");
+        }
+
+        notificationRepository.delete(notification);
+    }
+
+    @Transactional
     public void createBookingApprovedNotification(Long userId, Long bookingId) {
         String title = "Booking Approved";
         String message = "Your booking #" + bookingId + " has been approved.";
@@ -111,6 +125,26 @@ public class NotificationService {
         return toResponse(notificationRepository.save(notification));
     }
 
+    @Transactional
+    public void createBroadcastNotification(com.smartcampus.notification.dto.CreateBroadcastRequest request, String adminEmail) {
+        User createdBy = userService.getByEmailOrThrow(adminEmail);
+        List<User> allUsers = userRepository.findAll();
+        
+        List<Notification> notifications = allUsers.stream().map(recipient -> {
+            Notification notification = new Notification();
+            notification.setTitle(request.title());
+            notification.setMessage(request.message());
+            notification.setType(NotificationType.CAMPUS_ALERT);
+            notification.setRecipient(recipient);
+            notification.setCreatedBy(createdBy);
+            notification.setRead(false);
+            notification.setCreatedAt(LocalDateTime.now());
+            return notification;
+        }).toList();
+        
+        notificationRepository.saveAll(notifications);
+    }
+
     public List<NotificationResponse> getAllNotifications() {
         return notificationRepository.findAll().stream().map(this::toResponse).toList();
     }
@@ -146,6 +180,7 @@ public class NotificationService {
             case BOOKING_APPROVED, BOOKING_REJECTED -> preference.isBookingNotificationsEnabled();
             case TICKET_STATUS_CHANGED -> preference.isTicketNotificationsEnabled();
             case NEW_COMMENT -> preference.isCommentNotificationsEnabled();
+            case CAMPUS_ALERT -> true;
         };
     }
 

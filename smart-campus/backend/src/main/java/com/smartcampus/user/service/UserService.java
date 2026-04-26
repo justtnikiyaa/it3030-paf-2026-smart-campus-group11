@@ -62,6 +62,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public java.util.List<AuthMeResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toAuthMeResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public java.util.List<AuthMeResponse> getTechnicians() {
         return userRepository.findByRoleName(RoleName.TECHNICIAN)
                 .stream()

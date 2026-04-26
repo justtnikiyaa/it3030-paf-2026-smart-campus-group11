@@ -1,9 +1,12 @@
 package com.smartcampus.notification.controller;
 
+import com.smartcampus.notification.dto.CreateBroadcastRequest;
 import com.smartcampus.notification.dto.CreateNotificationRequest;
 import com.smartcampus.notification.dto.NotificationResponse;
 import com.smartcampus.notification.dto.UnreadCountResponse;
 import com.smartcampus.notification.service.NotificationService;
+import com.smartcampus.user.entity.User;
+import com.smartcampus.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final UserService userService;
 
     @GetMapping("/my")
     public ResponseEntity<List<NotificationResponse>> getMyNotifications(@AuthenticationPrincipal OAuth2User principal) {
@@ -49,6 +53,21 @@ public class NotificationController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OAuth2User principal
+    ) {
+        String email = principal.getAttribute("email");
+        User currentUser = userService.getByEmailOrThrow(email);
+
+        boolean isAdmin = principal.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+
+        notificationService.deleteNotification(id, currentUser.getId(), isAdmin);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping
     public ResponseEntity<NotificationResponse> createNotification(
             @Valid @RequestBody CreateNotificationRequest request,
@@ -57,6 +76,16 @@ public class NotificationController {
         String adminEmail = principal.getAttribute("email");
         NotificationResponse response = notificationService.createNotification(request, adminEmail);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/broadcast")
+    public ResponseEntity<Void> broadcastNotification(
+            @Valid @RequestBody CreateBroadcastRequest request,
+            @AuthenticationPrincipal OAuth2User principal
+    ) {
+        String adminEmail = principal.getAttribute("email");
+        notificationService.createBroadcastNotification(request, adminEmail);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping

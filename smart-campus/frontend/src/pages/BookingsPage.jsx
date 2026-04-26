@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AppLayout from "../components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { PlusCircle, Calendar as CalendarIcon, Clock, XCircle, MapPin } from "lucide-react";
+import { PlusCircle, Calendar as CalendarIcon, Clock, XCircle, MapPin, Users, FileText, MessageSquare } from "lucide-react";
 import { bookingService } from "../services/bookingService";
 
 export default function BookingsPage() {
@@ -13,6 +13,8 @@ export default function BookingsPage() {
   const [formData, setFormData] = useState({
     title: "",
     resource: "",
+    purpose: "",
+    expectedAttendees: "",
     startTime: "",
     endTime: ""
   });
@@ -69,8 +71,8 @@ export default function BookingsPage() {
     e.preventDefault();
     setError("");
 
-    if (!formData.title || !formData.resource || !formData.startTime || !formData.endTime) {
-      setError("Validation failed: All fields are required.");
+    if (!formData.title || !formData.resource || !formData.purpose || !formData.startTime || !formData.endTime) {
+      setError("Validation failed: All required fields must be filled.");
       return;
     }
 
@@ -102,11 +104,13 @@ export default function BookingsPage() {
       await bookingService.createBooking({
         title: formData.title,
         resource: formData.resource,
+        purpose: formData.purpose,
+        expectedAttendees: formData.expectedAttendees ? parseInt(formData.expectedAttendees) : null,
         startTime: formData.startTime,
         endTime: formData.endTime
       });
       setShowForm(false);
-      setFormData({ title: "", resource: "", startTime: "", endTime: "" });
+      setFormData({ title: "", resource: "", purpose: "", expectedAttendees: "", startTime: "", endTime: "" });
       fetchBookings();
     } catch (err) {
       if (err.response?.data?.errors) {
@@ -223,8 +227,34 @@ export default function BookingsPage() {
                     />
                   </div>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Purpose</label>
+                    <input 
+                      type="text" 
+                      name="purpose" 
+                      required
+                      value={formData.purpose} 
+                      onChange={handleInputChange}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-[#0b1221] dark:text-slate-100" 
+                      placeholder="e.g. Database lab session for Year 2" 
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Expected Attendees</label>
+                    <input 
+                      type="number" 
+                      name="expectedAttendees" 
+                      min="1"
+                      value={formData.expectedAttendees} 
+                      onChange={handleInputChange}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-[#0b1221] dark:text-slate-100" 
+                      placeholder="e.g. 30" 
+                    />
+                  </div>
+                </div>
                 <div className="flex justify-end pt-2">
-                  <Button type="submit" disabled={!!error || !formData.title || !formData.resource || !formData.startTime || !formData.endTime}>
+                  <Button type="submit" disabled={!!error || !formData.title || !formData.resource || !formData.purpose || !formData.startTime || !formData.endTime}>
                     Submit Request
                   </Button>
                 </div>
@@ -264,7 +294,28 @@ export default function BookingsPage() {
                           {new Date(booking.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
+                      {booking.purpose && (
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-violet-500" />
+                          <span>{booking.purpose}</span>
+                        </div>
+                      )}
+                      {booking.expectedAttendees && (
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-teal-500" />
+                          <span>{booking.expectedAttendees} attendees</span>
+                        </div>
+                      )}
                     </div>
+                    {booking.adminReason && (
+                      <div className="mt-3 p-2 rounded-lg bg-slate-100 dark:bg-slate-800/50 text-xs text-slate-600 dark:text-slate-300">
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <MessageSquare className="w-3 h-3" />
+                          <span className="font-semibold">Admin Reason:</span>
+                        </div>
+                        {booking.adminReason}
+                      </div>
+                    )}
                   </div>
                   
                   {(booking.status === 'PENDING' || booking.status === 'APPROVED') && (

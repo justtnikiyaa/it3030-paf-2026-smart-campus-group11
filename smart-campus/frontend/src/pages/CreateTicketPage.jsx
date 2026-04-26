@@ -12,6 +12,8 @@ const PRIORITY_COLORS = {
   HIGH: "bg-red-500/20 text-red-700 dark:text-red-300",
 };
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
 export default function CreateTicketPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -20,21 +22,83 @@ export default function CreateTicketPage() {
     resource: "",
     category: "OTHER",
     priority: "MEDIUM",
+    preferredContact: "",
   });
-  const [images, setImages] = useState([]); // File[]
-  const [previews, setPreviews] = useState([]); // URL strings
+  const [images, setImages] = useState([]);
+  const [previews, setPreviews] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [touched, setTouched] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [imageError, setImageError] = useState(null);
 
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  // ── Field-level validation ──────────────────────────────────────────────
+  const validate = (name, value) => {
+    switch (name) {
+      case "subject":
+        if (!value.trim()) return "Subject is required.";
+        if (value.trim().length < 5) return "Subject must be at least 5 characters.";
+        if (value.length > 200) return "Subject must not exceed 200 characters.";
+        return null;
+      case "description":
+        if (!value.trim()) return "Description is required.";
+        if (value.trim().length < 10) return "Description must be at least 10 characters.";
+        if (value.length > 2000) return "Description must not exceed 2000 characters.";
+        return null;
+      case "resource":
+        if (value.length > 300) return "Location must not exceed 300 characters.";
+        return null;
+      case "preferredContact":
+        if (value.length > 300) return "Contact details must not exceed 300 characters.";
+        return null;
+      default:
+        return null;
+    }
+  };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    // Validate on change if field has been touched
+    if (touched[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: validate(name, value) }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setFieldErrors((prev) => ({ ...prev, [name]: validate(name, value) }));
+  };
+
+  // ── Image handling ──────────────────────────────────────────────────────
   const addFiles = useCallback((newFiles) => {
-    const valid = Array.from(newFiles).filter((f) => f.type.startsWith("image/"));
+    setImageError(null);
+    const allFiles = Array.from(newFiles);
+
+    // Check for non-image files
+    const nonImages = allFiles.filter((f) => !f.type.startsWith("image/"));
+    if (nonImages.length > 0) {
+      setImageError("Only image files (JPG, PNG, GIF, etc.) are allowed.");
+      return;
+    }
+
+    // Check for oversized files
+    const oversized = allFiles.filter((f) => f.size > MAX_FILE_SIZE);
+    if (oversized.length > 0) {
+      setImageError(`File "${oversized[0].name}" exceeds the 5 MB size limit.`);
+      return;
+    }
+
     const remaining = 3 - images.length;
-    const toAdd = valid.slice(0, remaining);
-    if (!toAdd.length) return;
+    if (remaining <= 0) {
+      setImageError("Maximum 3 images allowed.");
+      return;
+    }
+
+    const toAdd = allFiles.slice(0, remaining);
     setImages((prev) => [...prev, ...toAdd]);
     setPreviews((prev) => [...prev, ...toAdd.map((f) => URL.createObjectURL(f))]);
   }, [images]);
@@ -43,6 +107,7 @@ export default function CreateTicketPage() {
     URL.revokeObjectURL(previews[idx]);
     setImages((prev) => prev.filter((_, i) => i !== idx));
     setPreviews((prev) => prev.filter((_, i) => i !== idx));
+    setImageError(null);
   };
 
   const handleDrop = (e) => {
@@ -51,18 +116,44 @@ export default function CreateTicketPage() {
     addFiles(e.dataTransfer.files);
   };
 
+  // ── Full form validation on submit ──────────────────────────────────────
+  const validateAll = () => {
+    const errors = {};
+    errors.subject = validate("subject", form.subject);
+    errors.description = validate("description", form.description);
+    errors.resource = validate("resource", form.resource);
+    errors.preferredContact = validate("preferredContact", form.preferredContact);
+
+    // Remove null entries
+    Object.keys(errors).forEach((k) => { if (!errors[k]) delete errors[k]; });
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    // Mark all required fields as touched
+    setTouched({ subject: true, description: true, resource: true, preferredContact: true });
+
+    const errors = validateAll();
+    setFieldErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setError("Please fix the validation errors below before submitting.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       const formData = new FormData();
-      formData.append("subject", form.subject);
-      formData.append("description", form.description);
-      formData.append("resource", form.resource);
+      formData.append("subject", form.subject.trim());
+      formData.append("description", form.description.trim());
+      formData.append("resource", form.resource.trim());
       formData.append("category", form.category);
       formData.append("priority", form.priority);
+      if (form.preferredContact.trim()) formData.append("preferredContact", form.preferredContact.trim());
       images.forEach((img) => formData.append("images", img));
 
       await ticketService.createTicket(formData);
@@ -73,6 +164,20 @@ export default function CreateTicketPage() {
       setIsSubmitting(false);
     }
   };
+
+  // ── Helper: input border class ──────────────────────────────────────────
+  const inputClass = (name) => {
+    const base = "w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition dark:bg-[#0d1628] dark:text-white dark:placeholder-slate-500";
+    if (touched[name] && fieldErrors[name]) {
+      return `${base} border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500`;
+    }
+    if (touched[name] && !fieldErrors[name] && form[name]?.trim()) {
+      return `${base} border-emerald-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-500`;
+    }
+    return `${base} border-slate-300 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-600`;
+  };
+
+  const hasErrors = Object.values(fieldErrors).some(Boolean);
 
   return (
     <AppLayout title="Submit Incident Ticket">
@@ -91,7 +196,7 @@ export default function CreateTicketPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
             {/* Subject */}
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -101,11 +206,17 @@ export default function CreateTicketPage() {
                 name="subject"
                 value={form.subject}
                 onChange={handleChange}
-                required
+                onBlur={handleBlur}
                 maxLength={200}
                 placeholder="e.g. Air conditioning not working in Lab 3B"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-600 dark:bg-[#0d1628] dark:text-white dark:placeholder-slate-500"
+                className={inputClass("subject")}
               />
+              <div className="mt-1 flex items-center justify-between">
+                {touched.subject && fieldErrors.subject ? (
+                  <p className="text-xs text-red-600 dark:text-red-400">{fieldErrors.subject}</p>
+                ) : <span />}
+                <p className="text-[11px] text-slate-400">{form.subject.length}/200</p>
+              </div>
             </div>
 
             {/* Resource */}
@@ -117,10 +228,14 @@ export default function CreateTicketPage() {
                 name="resource"
                 value={form.resource}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 maxLength={300}
                 placeholder="e.g. Building A, Room 301"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-600 dark:bg-[#0d1628] dark:text-white dark:placeholder-slate-500"
+                className={inputClass("resource")}
               />
+              {touched.resource && fieldErrors.resource && (
+                <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.resource}</p>
+              )}
             </div>
 
             {/* Category & Priority */}
@@ -171,13 +286,39 @@ export default function CreateTicketPage() {
                 name="description"
                 value={form.description}
                 onChange={handleChange}
-                required
+                onBlur={handleBlur}
                 maxLength={2000}
                 rows={4}
                 placeholder="Describe the issue in detail..."
-                className="w-full resize-none rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-600 dark:bg-[#0d1628] dark:text-white dark:placeholder-slate-500"
+                className={`${inputClass("description")} resize-none`}
               />
-              <p className="mt-1 text-right text-[11px] text-slate-400">{form.description.length}/2000</p>
+              <div className="mt-1 flex items-center justify-between">
+                {touched.description && fieldErrors.description ? (
+                  <p className="text-xs text-red-600 dark:text-red-400">{fieldErrors.description}</p>
+                ) : <span />}
+                <p className={`text-[11px] ${form.description.length > 1900 ? 'text-amber-500 font-medium' : 'text-slate-400'}`}>
+                  {form.description.length}/2000
+                </p>
+              </div>
+            </div>
+
+            {/* Preferred Contact */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Preferred Contact Details
+              </label>
+              <input
+                name="preferredContact"
+                value={form.preferredContact}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                maxLength={300}
+                placeholder="e.g. 077-123-4567 or john@university.edu"
+                className={inputClass("preferredContact")}
+              />
+              {touched.preferredContact && fieldErrors.preferredContact && (
+                <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.preferredContact}</p>
+              )}
             </div>
 
             {/* Image Upload */}
@@ -190,7 +331,9 @@ export default function CreateTicketPage() {
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
                 className={`relative flex min-h-[100px] cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-4 transition-colors ${
-                  isDragging
+                  imageError
+                    ? "border-red-400 bg-red-50 dark:border-red-500 dark:bg-red-900/10"
+                    : isDragging
                     ? "border-cyan-400 bg-cyan-50 dark:border-cyan-400 dark:bg-cyan-900/20"
                     : "border-slate-300 bg-slate-50 hover:border-cyan-400 dark:border-slate-600 dark:bg-[#0d1628] dark:hover:border-cyan-500"
                 }`}
@@ -239,6 +382,9 @@ export default function CreateTicketPage() {
                   </div>
                 )}
               </div>
+              {imageError && (
+                <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">{imageError}</p>
+              )}
             </div>
 
             {/* Submit */}
@@ -252,7 +398,7 @@ export default function CreateTicketPage() {
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || hasErrors}
                 className="rounded-lg bg-cyan-600 px-5 py-2 text-sm font-semibold text-white shadow transition hover:bg-cyan-700 disabled:opacity-60 dark:bg-cyan-500 dark:hover:bg-cyan-600"
               >
                 {isSubmitting ? "Submitting..." : "Submit Ticket"}

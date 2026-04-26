@@ -21,6 +21,7 @@ public record TicketResponse(
         Long assignedTechnicianId,
         String assignedTechnicianName,
         String resolutionNotes,
+        String preferredContact,
         List<TicketCommentResponse> comments,
         LocalDateTime createdAt,
         LocalDateTime updatedAt

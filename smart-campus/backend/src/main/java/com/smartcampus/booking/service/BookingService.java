@@ -47,6 +47,8 @@ public class BookingService {
         booking.setOwner(owner);
         booking.setTitle(request.title());
         booking.setResource(request.resource());
+        booking.setPurpose(request.purpose());
+        booking.setExpectedAttendees(request.expectedAttendees());
         booking.setStartTime(request.startTime());
         booking.setEndTime(request.endTime());
         booking.setStatus(BookingStatus.PENDING);
@@ -93,7 +95,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponse approveBooking(Long bookingId) {
+    public BookingResponse approveBooking(Long bookingId, String adminReason) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
 
@@ -102,6 +104,7 @@ public class BookingService {
         }
 
         booking.setStatus(BookingStatus.APPROVED);
+        booking.setAdminReason(adminReason);
         booking.setUpdatedAt(LocalDateTime.now());
         Booking saved = bookingRepository.save(booking);
 
@@ -112,7 +115,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponse rejectBooking(Long bookingId) {
+    public BookingResponse rejectBooking(Long bookingId, String adminReason) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
 
@@ -121,6 +124,7 @@ public class BookingService {
         }
 
         booking.setStatus(BookingStatus.REJECTED);
+        booking.setAdminReason(adminReason);
         booking.setUpdatedAt(LocalDateTime.now());
         Booking saved = bookingRepository.save(booking);
 
@@ -135,9 +139,12 @@ public class BookingService {
                 booking.getId(),
                 booking.getTitle(),
                 booking.getResource(),
+                booking.getPurpose(),
+                booking.getExpectedAttendees(),
                 booking.getStartTime(),
                 booking.getEndTime(),
                 booking.getStatus(),
+                booking.getAdminReason(),
                 booking.getOwner().getId(),
                 booking.getCreatedAt(),
                 booking.getUpdatedAt()

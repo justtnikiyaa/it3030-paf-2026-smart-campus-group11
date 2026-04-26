@@ -34,6 +34,11 @@ const typeMeta = {
     label: "New Comment",
     icon: MessageSquare,
     iconClass: "text-sky-600 dark:text-sky-300"
+  },
+  CAMPUS_ALERT: {
+    label: "Campus Alert",
+    icon: TriangleAlert,
+    iconClass: "text-amber-600 dark:text-amber-500"
   }
 };
 

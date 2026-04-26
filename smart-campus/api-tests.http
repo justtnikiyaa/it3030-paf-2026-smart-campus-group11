@@ -1,0 +1,149 @@
+@baseUrl = http://localhost:8081
+# ⚠️ REPLACE THE VALUE BELOW WITH A JSESSIONID CREATED BY THIS SAME BACKEND (localhost:8081) ⚠️
+# Tip: sign in via http://localhost:5173 after setting VITE_API_BASE_URL=http://localhost:8081,
+# then copy JSESSIONID from browser devtools for localhost.
+@cookie = JSESSIONID=FDD853B730F83611BEB67B3DD2F6A0F6
+
+### ==========================================
+### MODULE 1: AUTHENTICATION
+### ==========================================
+
+### 1.1 Get Current Logged-In User
+GET {{baseUrl}}/api/auth/me
+Cookie: {{cookie}}
+
+
+### ==========================================
+### MODULE 2: BOOKINGS
+### ==========================================
+
+### 2.1 Create a Booking
+POST {{baseUrl}}/api/bookings
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "title": "PAF Group Meeting",
+  "resource": "Library Room A",
+  "purpose": "Group Assignment Meeting",
+  "expectedAttendees": 4,
+  "startTime": "2026-04-25T09:00:00",
+  "endTime": "2026-04-25T11:00:00"
+}
+
+### 2.2 Get My Bookings
+GET {{baseUrl}}/api/bookings/me
+Cookie: {{cookie}}
+
+### 2.3 Approve a Booking (Admin Only)
+# Note: Ensure booking ID '1' exists.
+PATCH {{baseUrl}}/api/admin/bookings/1/approve
+Cookie: {{cookie}}
+
+
+### ==========================================
+### MODULE 3: TICKETS & COMMENTS
+### ==========================================
+
+### 3.1 Create a Maintenance Ticket
+POST {{baseUrl}}/api/tickets
+Cookie: {{cookie}}
+Content-Type: multipart/form-data; boundary=----FormBoundaryXYZ
+
+------FormBoundaryXYZ
+Content-Disposition: form-data; name="subject"
+
+Broken AC in Library
+------FormBoundaryXYZ
+Content-Disposition: form-data; name="description"
+
+The air conditioner on the second floor is leaking.
+------FormBoundaryXYZ
+Content-Disposition: form-data; name="resource"
+
+Library 2nd Floor
+------FormBoundaryXYZ
+Content-Disposition: form-data; name="category"
+
+HVAC
+------FormBoundaryXYZ
+Content-Disposition: form-data; name="priority"
+
+HIGH
+------FormBoundaryXYZ--
+
+### 3.2 Add a Comment to the Ticket
+POST {{baseUrl}}/api/tickets/1/comments
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "message": "Technician has been notified and is on the way."
+}
+
+### 3.3 Update Ticket Status (Technician/Admin)
+PUT {{baseUrl}}/api/tickets/1/status
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}
+
+
+### ==========================================
+### MODULE 4: NOTIFICATIONS (Member 4 specific)
+### ==========================================
+
+### 4.1 Get Unread Notification Count
+GET {{baseUrl}}/api/notifications/my/unread-count
+Cookie: {{cookie}}
+
+### 4.2 Get All My Notifications
+GET {{baseUrl}}/api/notifications/my
+Cookie: {{cookie}}
+
+### 4.3 Mark All Notifications as Read
+PATCH {{baseUrl}}/api/notifications/my/read-all
+Cookie: {{cookie}}
+
+
+### ==========================================
+### MODULE 5: RESOURCES
+### ==========================================
+
+### 5.1 Get All Resources
+GET {{baseUrl}}/api/resources
+Cookie: {{cookie}}
+
+### 5.2 Create a Resource (Admin Only)
+POST {{baseUrl}}/api/resources
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "name": "New Advanced Computing Lab",
+  "type": "LAB",
+  "capacity": 30,
+  "location": "Engineering Building - Floor 3",
+  "status": "ACTIVE",
+  "description": "High performance computing lab equipped with latest GPUs."
+}
+
+### 5.3 Get Resource by ID
+# Note: Ensure resource ID '1' exists.
+GET {{baseUrl}}/api/resources/1
+Cookie: {{cookie}}
+
+
+### ==========================================
+### EXTRA ADMIN TESTS
+### ==========================================
+
+### List All Tickets (Admin Only)
+GET {{baseUrl}}/api/tickets
+Cookie: {{cookie}}
+
+### List All Bookings (Admin Only)
+GET {{baseUrl}}/api/admin/bookings
+Cookie: {{cookie}}
