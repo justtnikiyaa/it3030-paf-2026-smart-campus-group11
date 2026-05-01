@@ -26,8 +26,8 @@ public class CorsConfig {
         allowedOrigins.add("http://127.0.0.1:5173");
         config.setAllowedOrigins(allowedOrigins);
 
-        // Also allow different local dev ports and railway deployment domains
-        config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*", "https://*.up.railway.app", "https://*.railway.app"));
+        // Also allow different local dev ports and deployment domains
+        config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*", "https://*.up.railway.app", "https://*.railway.app", "https://*.vercel.app"));
 
         config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
