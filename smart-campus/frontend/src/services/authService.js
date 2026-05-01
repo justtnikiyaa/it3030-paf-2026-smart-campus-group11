@@ -1,6 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
 const GOOGLE_OAUTH_LOGIN_URL = `${API_BASE_URL}/oauth2/authorization/google`;
-const AUTH_ME_TIMEOUT_MS = 5000;
+const AUTH_ME_TIMEOUT_MS = 60000; // Increased to 60s to allow Render free tier backend to spin up
 
 const authService = {
   loginWithGoogle: () => {
