@@ -25,14 +25,8 @@ function sleep(ms) {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState({
-    id: 1,
-    email: "local@smartcampus.com",
-    fullName: "Local Admin",
-    pictureUrl: "",
-    role: "ADMIN"
-  });
-  const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const refreshCurrentUser = useCallback(async () => {
     const me = await authService.getMe();
@@ -48,9 +42,10 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    // Disabled authentication bootstrap for local UI testing
-    // bootstrap();
-  }, []);
+    refreshCurrentUser().finally(() => {
+      setIsAuthLoading(false);
+    });
+  }, [refreshCurrentUser]);
 
   const loginWithGoogle = useCallback(() => {
     authService.loginWithGoogle();
